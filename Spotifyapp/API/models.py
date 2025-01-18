@@ -8,3 +8,5 @@ class Token(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     expires_in = models.DateTimeField()
     token_type = models.CharField(max_length=50)
+
+
