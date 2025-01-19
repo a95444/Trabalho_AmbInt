@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Current Song</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+
+    <div id="song-info" class="text-center mt-20">
+        <h3 class="text-3xl mb-4">{{ song.title }} - {{ song.artist }}</h3>
+
+        <!-- Vinyl Container with continuous spinning animation -->
+        <div class="relative inline-block mb-10 animate-spin-fast">
+            <div class="w-64 h-64 rounded-full bg-gradient-to-r from-gray-800 via-gray-700 to-gray-600 relative mx-auto">
+                <!-- Album Cover in the center (spinning with the vinyl) -->
+                <img src="{{ song.album_cover }}" alt="Album Cover" class="w-44 h-44 rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-4 border-white object-cover scale-105">
+            </div>
+        </div>
+
+
+
+        <!-- Song Info -->
+        <div class="text-xl mb-6">
+            <p>Duration: {{ song.duration }} seconds</p>
+            <p>Time: {{ song.time }} seconds</p>
+        </div>
+
+        <!-- Controls -->
+        <div class="flex justify-center space-x-4">
+            <button id="play-pause-btn" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg text-lg" data-action="resume">Play</button>
+            <button id="stop-btn" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg text-lg" data-action="stop">Stop</button>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Play/Pause button
+            $("#play-pause-btn").click(function() {
+                var action = $(this).data("action");
+                var key = "{{ user_key }}";  // Pass the key value from the template
+
+                $.ajax({
+                    url: "/spotify/controls/",  // URL of the SpotifyControls view
+                    type: "POST",
+                    data: {
+                        key: key,
+                        action: action,
+                    },
+                    success: function(response) {
+                        console.log("Action successful:", response);
+                        // Toggle button text based on action
+                        if (action === "resume") {
+                            $("#play-pause-btn").data("action", "stop").text("Pause");
+                        } else {
+                            $("#play-pause-btn").data("action", "resume").text("Play");
+                        }
+                    },
+                    error: function(response) {
+                        console.error("Action failed:", response);
+                    }
+                });
+            });
+
+            // Stop button
+            $("#stop-btn").click(function() {
+                var action = $(this).data("action");
+                var key = "{{ user_key }}";  // Pass the key value from the template
+
+                $.ajax({
+                    url: "/spotify/controls/",  // URL of the SpotifyControls view
+                    type: "POST",
+                    data: {
+                        key: key,
+                        action: action,
+                    },
+                    success: function(response) {
+                        console.log("Action successful:", response);
+                        // Disable the stop button after it's clicked
+                        $("#stop-btn").prop("disabled", true);
+                        
+                    },
+                    error: function(response) {
+                        console.error("Action failed:", response);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <style>
+        /* Tailwind Custom continuous animation for fast spinning */
+        @keyframes spin-fast {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Apply the animation */
+        .animate-spin-fast {
+            animation: spin-fast 7s linear infinite; /* time to do a whole spin */
+        }
+    </style>
+
+</body>
+</html>

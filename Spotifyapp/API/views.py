@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.response import Response
+from rest_framework.response import Response as Response_status
 from rest_framework import *
 from requests import *
 from django.http import HttpResponseRedirect
@@ -15,7 +15,7 @@ class AuthenticationURL(APIView):
                      params= {
                          'scope': scopes,
                          'response_type': 'code',
-                         'redirect_url': REDIRECT_URL,
+                         'redirect_uri': REDIRECT_URL,
                          'client_id': CLIENT_ID
                      }).prepare().url
         return HttpResponseRedirect(url)
@@ -24,7 +24,7 @@ class AuthenticationURL(APIView):
 def spotify_redirect(request, format=None):
     code=request.GET.get('code')
     error=request.GET.get('error')
-
+    print("REDIRECT")
     if error:
         return error
 
@@ -55,7 +55,7 @@ def spotify_redirect(request, format=None):
     )
 
     #create a redirect url to the current song details
-    redirect_url = "" #preencher depois
+    redirect_url = f"http://127.0.0.1:8000/spotify/current-song?key={authKey}" #recebe o parametro que vem da classe currentsong
     return HttpResponseRedirect(redirect_url)
 
 
@@ -71,11 +71,11 @@ class CheckAuthentication(APIView):
 
         if auth_status:
             #will be redirected to the credentials of a song
-            redirect_url=""
+            redirect_url= f"http://127.0.0.1:8000/spotify/current-song?key={key}"
             return  HttpResponseRedirect(redirect_url)
         else:
             #will redirect to the AuthenticationURL
-            redirect_url=""
+            redirect_url=f"http://127.0.0.1:8000/spotify/auth-url"
             return HttpResponseRedirect(redirect_url)
 
 
@@ -84,14 +84,20 @@ class CurrentSong(APIView):
     def get(self, request, format=None):
         key = request.GET.get(self.kwarg)
         token = Token.objects.filter(user = key)
-        print(token)
+        #print(token)
 
         #create an endpoint
         endpoint = "player/currently-playing"
         response = spotify_requests_execution(key, endpoint)
 
         if "error" in response or "item" not in response:
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
+            print(f"RESPONSE: {response}")
+            try:
+                if 'token expired' in response['error']['message']:
+                    print("CORRI CRLH")
+                    return redirect(AuthenticationURL)
+            except:
+                return Response_status({}, status=204)  # Use numeric status code directly
 
         item = response.get('item') #objeto que vem do API que tem informações como o Album, nome da musica e afins
         progress= response.get('progress_ms') #vem do API e diz em que ponto da musica esta se a ouvir
@@ -108,4 +114,45 @@ class CurrentSong(APIView):
             name =artist.get("name")
             artists+=name
 
+        song={
+            "id":song_id,
+            "title":title,
+            "artist":artists,
+            "duration":duration,
+            "time":progress,
+            "album_cover":album_cover,
+            "is_playing":is_playing
+        }
+        print(song)
+        print(f"CURRENT SONG Key: {key}")
+        print(f"CURRENT SONG Token: {Token.objects.filter(user=key)}")
+        return render(request, 'current_song_template.html', {'song': song, "user_token":token, "user_key":key})
+        #return Response_status(song, status=status.HTTP_200_OK) #no 1º campo posso passar o que eu quiser desde que tenha um formato de dicionário, posso passar a Response toda, que tem informação de todas as coisas 
         
+
+class SpotifyControls(APIView):
+    def post(self, request, format=None):
+        key = request.data.get("key")
+        action = request.data.get("action")  # 'resume' or 'stop'
+
+        if not key or not action:
+            return Response_status({"error": "Missing key or action"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Log the request
+        print(f"SPOTIFY CONTROLS Key: {key}")
+        print(f"SPOTIFY CONTROLS Action: {action}")
+
+        endpoint = ""
+        if action == "resume":
+            endpoint = "player/play"
+        elif action == "stop":
+            endpoint = "player/pause"
+        else:
+            return Response_status({"error": "Invalid action"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Perform the action via the Spotify API
+        response = spotify_requests_execution(key, endpoint)
+        if "error" in response:
+            return Response_status({"error": response["error"]}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response_status({"message": f"Action {action} executed successfully"}, status=status.HTTP_200_OK)

@@ -5,7 +5,7 @@ from requests import *
 from.credentials import *
 
 
-BASE_URL='https://api.spotify.com/v1/me'
+BASE_URL='https://api.spotify.com/v1/me/'
 
 # 1- Check Tokens
 
@@ -48,7 +48,7 @@ def is_spotify_authenticated(session_id):
 
     if tokens:
         if tokens.expires_in <= timezone.now():
-            pass
+            refresh_token_function(session_id)  # Refresh token if expired
         return True
     return False
 
@@ -61,7 +61,7 @@ def refresh_token_function(session_id):
         'refresh_token': refresh_token,
         'client_id': CLIENT_ID,
         'client_secret': CLIENT_SECRET
-    })
+    }).json()
 
     access_token=response.get('access_token')
     expires_in=response.get('expires_in')
@@ -79,10 +79,17 @@ def refresh_token_function(session_id):
 
 def spotify_requests_execution(session_id, endpoint):
     token = check_token(session_id)
+    print(f"TOKEN TOKEN: {token}")
     headers = {"Content-Type": "application/json", 'Authorization' : 'Bearer ' + token.access_token}
 
     #get data on the song from spotify API
-    response = get(BASE_URL + endpoint, {}, headers=headers)
+    print(f"URL DO REQUEST: {BASE_URL}{endpoint}")
+
+    # Ensure you're using PUT for controlling playback
+    if endpoint == "player/pause" or endpoint == "player/play":
+        response = put(BASE_URL + endpoint, {}, headers=headers)
+    else:
+        response = get(BASE_URL + endpoint, {}, headers=headers)
 
     if response:
         print(response)
