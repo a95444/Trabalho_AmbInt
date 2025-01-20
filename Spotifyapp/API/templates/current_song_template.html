@@ -22,21 +22,166 @@
 
 
 
-        <!-- Song Info -->
+        <!-- Song Info 
         <div class="text-xl mb-6">
             <p>Duration: {{ song.duration }} seconds</p>
             <p>Time: {{ song.time }} seconds</p>
+        </div>-->
+
+        <!-- Progress Bar -->
+        <div id="progress-container" class="w-64 mx-auto mt-4">
+            <input
+            id="progress-bar"
+            type="range"
+            min="0"
+            max="{{ song.duration }}"
+            class="w-full h-2 bg-gray-300 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+            
+            <div class="flex justify-between text-sm text-gray-600 mt-1">
+                <span id="current-time">0:00</span>
+                <span id="total-time">{{ song.duration|date:"i:s" }}</span>
+            </div>
         </div>
+        
 
         <!-- Controls -->
         <div class="flex justify-center space-x-4">
+            <button id="previous-btn" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-lg">Previous</button>
             <button id="play-pause-btn" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg text-lg" data-action="resume">Play</button>
             <button id="stop-btn" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg text-lg" data-action="stop">Stop</button>
+            <button id="skip-btn" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg text-lg">Skip</button>
+        </div>
+    </div>
+
         </div>
     </div>
 
     <script>
         $(document).ready(function() {
+
+            //Progress Bar
+            const progressBar = document.getElementById("progress-bar");
+            const currentTimeLabel = document.getElementById("current-time");
+            const totalTimeLabel = document.getElementById("total-time");
+            const songDuration = "{{ song.duration }}";
+            const durationInMs = parseInt(songDuration, 10);
+            //console.log("Parsed Duration:", durationInMs);
+            
+            let interval;
+
+            // Function to format milliseconds to mm:ss
+            function formatTime(ms) {
+                const minutes = Math.floor(ms / 60000);
+                const seconds = Math.floor((ms % 60000) / 1000).toString().padStart(2, '0');
+                return `${minutes}:${seconds}`;
+            }
+
+            // Update progress bar and time labels periodically
+            function updateProgressBar() {
+                const progressBar = document.getElementById("progress-bar");
+                //console.log(progressBar);
+                const key = "{{ user_key }}"; // Ensure this is passed correctly from Django
+
+                fetch(`/spotify/current-song?key=${key}`, {
+                    method: "GET",
+                    headers: { "X-Requested-With": "XMLHttpRequest" },
+                })
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then((data) => {
+                        //console.log(data);
+                        const currentPosition = data.time;
+                        const songDuration = data.duration;
+
+                        // Dynamically set the max value of the progress bar if it's not set yet
+                        if (progressBar.max !== songDuration) {
+                            progressBar.max = songDuration;
+                        }
+
+                        // Set the current progress
+                        progressBar.value = (currentPosition);
+                        //console.log(progressBar.value)
+                        // Optionally update time labels
+                        const currentTimeLabel = document.getElementById("current-time");
+                        currentTimeLabel.textContent = formatTime(currentPosition);
+                    })
+                    .catch((error) => {
+                        console.error("Error updating progress bar:", error);
+                    });
+            }
+
+
+            // Seek to a specific position in the song
+            progressBar.addEventListener("change", function () {
+                console.log("AAAAAAAAAAAAA");
+                const newPosition = progressBar.value;
+                console.log(newPosition);
+                $.ajax({
+                    url: "/spotify/controls/", // SpotifyControls endpoint
+                    type: "POST",
+                    data: {
+                        key: "{{ user_key }}", // Pass the session key
+                        action: "seek",
+                        position: newPosition,
+                    },
+                    success: function () {
+                        updateProgressBar(); // Ensure progress bar syncs after seeking
+                    },
+                });
+            });
+
+            // Start the interval to update the progress bar
+            interval = setInterval(updateProgressBar, 1000); // Update every second
+
+            // Clean up interval on page unload
+            window.addEventListener("beforeunload", () => clearInterval(interval));
+
+
+            // Skip Button
+            $("#skip-btn").click(function() {
+                var key = "{{ user_key }}";  // Pass the key value from the template
+
+                $.ajax({
+                    url: "/spotify/controls/",  // URL for skip action
+                    type: "POST",
+                    data: {
+                        key: key,
+                        action: "skip",  // Add action for skipping to next song
+                    },
+                    success: function(response) {
+                        console.log("Skipped to next song:", response);
+                        // Optionally update UI to reflect the new song
+                    },
+                    error: function(response) {
+                        console.error("Skip action failed:", response);
+                    }
+                });
+            });
+            
+            $("#previous-btn").click(function() {
+                var key = "{{ user_key }}";  // Pass the key value from the template
+
+                $.ajax({
+                    url: "/spotify/controls/",  // URL for previous action
+                    type: "POST",
+                    data: {
+                        key: key,
+                        action: "previous",  // Add action for going back to previous song
+                    },
+                    success: function(response) {
+                        console.log("Went to previous song:", response);
+                        // Optionally update UI to reflect the new song
+                    },
+                    error: function(response) {
+                        console.error("Previous action failed:", response);
+                    }
+                });
+            });
+
             // Play/Pause button
             $("#play-pause-btn").click(function() {
                 var action = $(this).data("action");

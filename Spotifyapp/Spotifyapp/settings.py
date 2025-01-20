@@ -75,6 +75,35 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Spotifyapp.wsgi.application'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'WARNING',  # You can set this to 'ERROR' to suppress more logs
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',  # Optional: You can define a custom formatter
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'WARNING',  # You can use 'ERROR' to suppress more logs
+            'propagate': False,
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

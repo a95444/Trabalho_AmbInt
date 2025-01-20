@@ -1,3 +1,4 @@
+import requests
 from .models import Token
 from django.utils import  timezone
 from datetime import timedelta
@@ -79,11 +80,12 @@ def refresh_token_function(session_id):
 
 def spotify_requests_execution(session_id, endpoint):
     token = check_token(session_id)
-    print(f"TOKEN TOKEN: {token}")
-    headers = {"Content-Type": "application/json", 'Authorization' : 'Bearer ' + token.access_token}
+    #print(f"TOKEN TOKEN: {token}")
+    headers = {"Content-Type": "application/json", 
+               'Authorization' : 'Bearer ' + token.access_token}
 
     #get data on the song from spotify API
-    print(f"URL DO REQUEST: {BASE_URL}{endpoint}")
+    #print(f"URL DO REQUEST: {BASE_URL}{endpoint}")
 
     # Ensure you're using PUT for controlling playback
     if endpoint == "player/pause" or endpoint == "player/play":
@@ -92,7 +94,8 @@ def spotify_requests_execution(session_id, endpoint):
         response = get(BASE_URL + endpoint, {}, headers=headers)
 
     if response:
-        print(response)
+        pass
+        #print(response)
     else:
         print('No Response on spotify_requests_Execution!')
 
@@ -100,3 +103,28 @@ def spotify_requests_execution(session_id, endpoint):
         return response.json()
     except:
         return {'Error' : 'Issue with request'}
+    
+
+def spotify_seek(session_id, position_ms):
+    token = check_token(session_id)
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {token.access_token}",
+    }
+
+    # Correct endpoint
+    endpoint = f"player/seek?position_ms={position_ms}"
+    #print(f"BASE_URL 2: {BASE_URL + endpoint}")
+
+    response = put(BASE_URL + endpoint, headers=headers)
+
+    if response.status_code == 204:
+        return {"success": True, "message": "Seek successful"}
+    else:
+        try:
+            # Only attempt to parse the JSON if the status code is not 204
+            response_data = response.json()
+            return {"success": False, "message": "Seek failed", "details": response_data}
+        except requests.exceptions.JSONDecodeError:
+            # If JSON decoding fails, handle the error gracefully
+            return {"success": False, "message": "Seek failed, no JSON response", "details": response.text}

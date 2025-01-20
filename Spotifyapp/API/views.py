@@ -4,13 +4,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response as Response_status
 from rest_framework import *
 from requests import *
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from .credentials import CLIENT_ID, CLIENT_SECRET, REDIRECT_URL
 from .extras import *
 
 class AuthenticationURL(APIView):
     def get(self, request, format=None):
-        scopes="user-read-currently-playing user-read-playback-state user-modify-playback-state "
+        scopes="user-read-currently-playing user-read-playback-state user-modify-playback-state  "
         url= Request('GET', 'https://accounts.spotify.com/authorize',
                      params= {
                          'scope': scopes,
@@ -91,10 +91,10 @@ class CurrentSong(APIView):
         response = spotify_requests_execution(key, endpoint)
 
         if "error" in response or "item" not in response:
-            print(f"RESPONSE: {response}")
+            #print(f"RESPONSE: {response}")
             try:
                 if 'token expired' in response['error']['message']:
-                    print("CORRI CRLH")
+                    #print("CORRI CRLH")
                     return redirect(AuthenticationURL)
             except:
                 return Response_status({}, status=204)  # Use numeric status code directly
@@ -110,7 +110,8 @@ class CurrentSong(APIView):
         artists = ""
         for i, artist in enumerate(item.get("artists")): #vai iterar sobre a lista de todos os artistas que vem do API, e vai concatenar a variavel artists
             if i>0:
-                artist+=", "
+                artists+=", "
+    
             name =artist.get("name")
             artists+=name
 
@@ -123,9 +124,14 @@ class CurrentSong(APIView):
             "album_cover":album_cover,
             "is_playing":is_playing
         }
-        print(song)
+        '''        print(song)
         print(f"CURRENT SONG Key: {key}")
-        print(f"CURRENT SONG Token: {Token.objects.filter(user=key)}")
+        print(f"CURRENT SONG Token: {Token.objects.filter(user=key)}")'''
+
+        if request.headers.get("X-Requested-With") == "XMLHttpRequest":  # AJAX request
+            #print(f"SONG INFO NOW: {song}")
+            return JsonResponse(song, status=200)
+
         return render(request, 'current_song_template.html', {'song': song, "user_token":token, "user_key":key})
         #return Response_status(song, status=status.HTTP_200_OK) #no 1º campo posso passar o que eu quiser desde que tenha um formato de dicionário, posso passar a Response toda, que tem informação de todas as coisas 
         
@@ -133,7 +139,7 @@ class CurrentSong(APIView):
 class SpotifyControls(APIView):
     def post(self, request, format=None):
         key = request.data.get("key")
-        action = request.data.get("action")  # 'resume' or 'stop'
+        action = request.data.get("action")  # 'resume', 'stop', 'seek', etc.
 
         if not key or not action:
             return Response_status({"error": "Missing key or action"}, status=status.HTTP_400_BAD_REQUEST)
@@ -142,17 +148,33 @@ class SpotifyControls(APIView):
         print(f"SPOTIFY CONTROLS Key: {key}")
         print(f"SPOTIFY CONTROLS Action: {action}")
 
-        endpoint = ""
-        if action == "resume":
-            endpoint = "player/play"
-        elif action == "stop":
-            endpoint = "player/pause"
-        else:
+        # Define supported actions and their respective Spotify API endpoints
+        action_endpoints = {
+            "resume": "player/play",
+            "stop": "player/pause",
+            "seek": "player/seek",  # Seek will need special handling
+        }
+
+        # Validate the action
+        if action not in action_endpoints:
             return Response_status({"error": "Invalid action"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Perform the action via the Spotify API
-        response = spotify_requests_execution(key, endpoint)
+        # Special handling for "seek"
+        if action == "seek":
+            position_ms = request.data.get("position")
+            if not position_ms:
+                return Response_status({"error": "Missing position for seek action"}, status=status.HTTP_400_BAD_REQUEST)
+            endpoint = action_endpoints[action]
+            response = spotify_seek(key, int(position_ms))
+            print(f"RESPOSTA SEEK {response}") 
+        else:
+            # General execution for other actions
+            endpoint = action_endpoints[action]
+            response = spotify_requests_execution(key, endpoint)
+
+        # Check response and return appropriate status
         if "error" in response:
             return Response_status({"error": response["error"]}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response_status({"message": f"Action {action} executed successfully"}, status=status.HTTP_200_OK)
+
