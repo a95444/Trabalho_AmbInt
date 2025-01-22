@@ -10,13 +10,13 @@
 <body class="bg-gray-900 text-white font-sans">
 
     <div id="song-info" class="text-center mt-20">
-        <h3 class="text-3xl mb-4">{{ song.title }} - {{ song.artist }}</h3>
+        <h3 id="song-title" class="text-3xl mb-4">{{ song.title }} - {{ song.artist }}</h3>
 
         <!-- Vinyl Container with continuous spinning animation -->
         <div class="relative inline-block mb-10 animate-spin-fast">
             <div class="w-64 h-64 rounded-full bg-gradient-to-r from-gray-800 via-gray-700 to-gray-600 relative mx-auto">
                 <!-- Album Cover in the center (spinning with the vinyl) -->
-                <img src="{{ song.album_cover }}" alt="Album Cover" class="w-44 h-44 rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-4 border-white object-cover scale-105">
+                <img id="album-cover" src="{{ song.album_cover }}" alt="Album Cover" class="w-44 h-44 rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-4 border-white object-cover scale-105">
             </div>
         </div>
 
@@ -65,8 +65,10 @@
             const totalTimeLabel = document.getElementById("total-time");
             const songDuration = "{{ song.duration }}";
             const durationInMs = parseInt(songDuration, 10);
+            const songTitle = document.getElementById("song-title");
+            const albumCover = document.getElementById("album-cover");
             //console.log("Parsed Duration:", durationInMs);
-            
+            let currentSongTitle = sessionStorage.getItem("currentSongTitle") || "";
             let interval;
 
             // Function to format milliseconds to mm:ss
@@ -139,6 +141,60 @@
 
             // Clean up interval on page unload
             window.addEventListener("beforeunload", () => clearInterval(interval));
+
+            
+            // Function to fetch song info
+            function fetchSongInfo() {
+                const key = "{{ user_key }}"; // Ensure this is passed correctly from Django
+
+                fetch(`/spotify/current-song?key=${key}`, {
+                    method: "GET",
+                    headers: { "X-Requested-With": "XMLHttpRequest" },
+                })
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then((data) => {
+                        // Check if the song title has changed
+                        console.log(data.title);
+                        console.log(currentSongTitle);
+                        if (data.title !== currentSongTitle) {
+                            // Update stored title in sessionStorage
+                            console.log("A ALTERAR");
+                            
+                            currentSongTitle = data.title;
+                            sessionStorage.setItem("currentSongTitle", currentSongTitle);
+
+                            // Update song title and album cover in the DOM
+                            songTitle.textContent = `${data.title} - ${data.artist}`;
+                        } else if (!songTitle) {
+                            console.error("Elemento 'song-title' não encontrado no DOM.");
+                        }
+
+                        if (albumCover) {
+                            albumCover.src = data.album_cover;
+                        } else {
+                            console.error("Elemento 'album-cover' não encontrado no DOM.");
+                        }
+
+                        // Log the update for debugging purposes
+                        console.log(`Updated to new song: ${data.title}`);
+
+                        // Update the progress bar and current time
+                        progressBar.max = data.duration;
+                        progressBar.value = data.time;
+                        currentTimeLabel.textContent = formatTime(data.time);
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching song info:", error);
+                    });
+            }
+
+            // Periodically fetch song info 
+            setInterval(fetchSongInfo, 1000);
 
 
             // Skip Button

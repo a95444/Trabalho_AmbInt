@@ -90,6 +90,8 @@ def spotify_requests_execution(session_id, endpoint):
     # Ensure you're using PUT for controlling playback
     if endpoint == "player/pause" or endpoint == "player/play":
         response = put(BASE_URL + endpoint, {}, headers=headers)
+    elif endpoint == "player/next" or endpoint == "player/previous":
+        response = post(BASE_URL + endpoint, {}, headers=headers)
     else:
         response = get(BASE_URL + endpoint, {}, headers=headers)
 

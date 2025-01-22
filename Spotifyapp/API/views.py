@@ -152,7 +152,9 @@ class SpotifyControls(APIView):
         action_endpoints = {
             "resume": "player/play",
             "stop": "player/pause",
-            "seek": "player/seek",  # Seek will need special handling
+            "seek": "player/seek",
+            "skip": "player/next",
+            "previous": "player/previous"
         }
 
         # Validate the action
