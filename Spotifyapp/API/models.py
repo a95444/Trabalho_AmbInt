@@ -9,4 +9,7 @@ class Token(models.Model):
     expires_in = models.DateTimeField()
     token_type = models.CharField(max_length=50)
 
-
+class HeartRateData(models.Model):
+    user_session = models.ForeignKey(Token, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    heart_rate = models.IntegerField()  # BPM

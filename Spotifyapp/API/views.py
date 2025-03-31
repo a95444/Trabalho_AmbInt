@@ -7,6 +7,7 @@ from requests import *
 from django.http import HttpResponseRedirect, JsonResponse
 from .credentials import CLIENT_ID, CLIENT_SECRET, REDIRECT_URL
 from .extras import *
+import math
 
 class AuthenticationURL(APIView):
     def get(self, request, format=None):
@@ -94,39 +95,45 @@ class CurrentSong(APIView):
             #print(f"RESPONSE: {response}")
             try:
                 if 'token expired' in response['error']['message']:
-                    #print("CORRI CRLH")
+                    #print("CORRI")
                     return redirect(AuthenticationURL)
             except:
                 return Response_status({}, status=204)  # Use numeric status code directly
 
-        item = response.get('item') #objeto que vem do API que tem informações como o Album, nome da musica e afins
-        progress= response.get('progress_ms') #vem do API e diz em que ponto da musica esta se a ouvir
-        is_playing=response.get('is_playing')
-        duration=item.get('duration_ms')
-        song_id=item.get('id')
+        item = response.get('item')
+        progress = response.get('progress_ms')
+        is_playing = response.get('is_playing')
+        duration = item.get('duration_ms')
+        song_id = item.get('id')
         title = item.get('name')
         album_cover = item.get('album').get('images')[0].get('url')
+        volume_percent = response.get('device', {}).get('volume_percent', 50)  # Default 50% se não disponível
 
-        artists = ""
-        for i, artist in enumerate(item.get("artists")): #vai iterar sobre a lista de todos os artistas que vem do API, e vai concatenar a variavel artists
-            if i>0:
-                artists+=", "
-    
-            name =artist.get("name")
-            artists+=name
+        # 2. Gêneros do artista (nova requisição)
+        artist_id = item.get('artists')[0].get('id')
+        artist_response = spotify_requests_execution(key, f"artists/{artist_id}")
+        genres = artist_response.get('genres', [])  # Ex: ["pop", "rock"]
 
-        song={
-            "id":song_id,
-            "title":title,
-            "artist":artists,
-            "duration":duration,
-            "time":progress,
-            "album_cover":album_cover,
-            "is_playing":is_playing
+        # 3. Audio Features (nova requisição)
+        audio_features = spotify_requests_execution(key, f"audio-features/{song_id}")
+        
+        # 4. Cálculo de decibéis (fórmula: dB = 20 * log10(volume_percent / 100))
+        decibels = 20 * math.log10(volume_percent / 100) if volume_percent > 0 else -60  # -60 dB = silêncio
+
+        # Dados consolidados
+        song = {
+            "id": song_id,
+            "title": title,
+            "artist": ", ".join([artist.get('name') for artist in item.get('artists')]),
+            "duration": duration,
+            "time": progress,
+            "album_cover": album_cover,
+            "is_playing": is_playing,
+            "volume_percent": volume_percent,
+            "decibels": round(decibels, 2),
+            "genres": genres,
+            "audio_features": audio_features  # danceability, energy, etc.
         }
-        '''        print(song)
-        print(f"CURRENT SONG Key: {key}")
-        print(f"CURRENT SONG Token: {Token.objects.filter(user=key)}")'''
 
         if request.headers.get("X-Requested-With") == "XMLHttpRequest":  # AJAX request
             #print(f"SONG INFO NOW: {song}")
