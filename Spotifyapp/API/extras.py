@@ -80,32 +80,38 @@ def refresh_token_function(session_id):
 
 def spotify_requests_execution(session_id, endpoint):
     token = check_token(session_id)
-    #print(f"TOKEN TOKEN: {token}")
-    headers = {"Content-Type": "application/json", 
-               'Authorization' : 'Bearer ' + token.access_token}
+    if not token:
+        return {'Error': 'Token inválido'}
 
-    #get data on the song from spotify API
-    #print(f"URL DO REQUEST: {BASE_URL}{endpoint}")
-
-    # Ensure you're using PUT for controlling playback
-    if endpoint == "player/pause" or endpoint == "player/play":
-        response = put(BASE_URL + endpoint, {}, headers=headers)
-    elif endpoint == "player/next" or endpoint == "player/previous":
-        response = post(BASE_URL + endpoint, {}, headers=headers)
-    else:
-        response = get(BASE_URL + endpoint, {}, headers=headers)
-
-    if response:
-        pass
-        #print(response)
-    else:
-        print('No Response on spotify_requests_Execution!')
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {token.access_token}"
+    }
 
     try:
-        return response.json()
-    except:
-        return {'Error' : 'Issue with request'}
-    
+        # Endpoints que modificam estado (PUT/POST)
+        if endpoint in ["player/pause", "player/play"]:
+            response = put(BASE_URL + endpoint, headers=headers)
+        elif endpoint in ["player/next", "player/previous"]:
+            response = post(BASE_URL + endpoint, headers=headers)
+        else:
+            # Endpoints GET - Adiciona cache para evitar chamadas repetidas
+            if endpoint == "player/currently-playing":
+                response = get(BASE_URL + endpoint, headers=headers, timeout=2)
+                if response.status_code == 204:  # Sem conteúdo
+                    return {'status': 'no_playback'}
+            else:
+                response = get(BASE_URL + endpoint, headers=headers)
+
+        if not response.ok:
+            return {'Error': f"HTTP {response.status_code}"}
+
+        return response.json() if response.content else {'status': 'empty'}
+
+    except requests.exceptions.RequestException as e:
+        print(f"Erro na requisição: {str(e)}")  # Log detalhado
+        return {'Error': str(e)}
+
 
 def spotify_seek(session_id, position_ms):
     token = check_token(session_id)

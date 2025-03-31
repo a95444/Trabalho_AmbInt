@@ -7,4 +7,5 @@ urlpatterns=[
     path("check-auth", CheckAuthentication.as_view()),
     path("current-song", CurrentSong.as_view()),
     path("controls/", SpotifyControls.as_view(), name="spotify-controls"),
+    path("heart-rate/", HeartRateAPI.as_view(), name="heart-rate-api"),
     ]

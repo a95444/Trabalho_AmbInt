@@ -8,6 +8,8 @@ from django.http import HttpResponseRedirect, JsonResponse
 from .credentials import CLIENT_ID, CLIENT_SECRET, REDIRECT_URL
 from .extras import *
 import math
+import requests
+from .models import *
 
 class AuthenticationURL(APIView):
     def get(self, request, format=None):
@@ -187,3 +189,21 @@ class SpotifyControls(APIView):
 
         return Response_status({"message": f"Action {action} executed successfully"}, status=status.HTTP_200_OK)
 
+
+class HeartRateAPI(APIView):
+    def post(self, request):
+        session_key = request.data.get("session_key")
+        heart_rate = request.data.get("heart_rate")
+
+        if not session_key or not heart_rate:
+            return Response_status({"error": "Dados incompletos"}, status=400)
+
+        token = Token.objects.filter(user=session_key).first()
+        if not token:
+            return Response_status({"error": "Sessão inválida"}, status=404)
+
+        HeartRateData.objects.create(
+            user_session=token,
+            heart_rate=heart_rate
+        )
+        return Response_status({"message": "Dados salvos"}, status=200)
