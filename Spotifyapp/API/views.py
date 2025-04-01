@@ -10,6 +10,10 @@ from .extras import *
 import math
 import requests
 from .models import *
+from django.shortcuts import render
+
+
+
 
 class AuthenticationURL(APIView):
     def get(self, request, format=None):
@@ -56,6 +60,9 @@ def spotify_redirect(request, format=None):
         expires_in=expires_in,
         token_type=token_type,
     )
+    # Inicia o listener do Garmin após a autenticação
+    from .connect_garmin import start_garmin_listener
+    start_garmin_listener()
 
     #create a redirect url to the current song details
     redirect_url = f"http://127.0.0.1:8000/spotify/current-song?key={authKey}" #recebe o parametro que vem da classe currentsong
@@ -82,68 +89,79 @@ class CheckAuthentication(APIView):
             return HttpResponseRedirect(redirect_url)
 
 
+
+def home(request):
+    return render(request, 'home.html')
+
+
+
+from rest_framework import status
+from rest_framework.response import Response
+
+
 class CurrentSong(APIView):
     kwarg = "key"
+
     def get(self, request, format=None):
         key = request.GET.get(self.kwarg)
-        token = Token.objects.filter(user = key)
-        #print(token)
+        token = Token.objects.filter(user=key).first()
 
-        #create an endpoint
-        endpoint = "player/currently-playing"
-        response = spotify_requests_execution(key, endpoint)
+        if not token:
+            return Response({'error': 'Token inválido'}, status=status.HTTP_401_UNAUTHORIZED)
 
-        if "error" in response or "item" not in response:
-            #print(f"RESPONSE: {response}")
-            try:
-                if 'token expired' in response['error']['message']:
-                    #print("CORRI")
-                    return redirect(AuthenticationURL)
-            except:
-                return Response_status({}, status=204)  # Use numeric status code directly
+        # Obtém o estado atual
+        playback = spotify_requests_execution(key, "player/currently-playing")
 
-        item = response.get('item')
-        progress = response.get('progress_ms')
-        is_playing = response.get('is_playing')
-        duration = item.get('duration_ms')
-        song_id = item.get('id')
-        title = item.get('name')
-        album_cover = item.get('album').get('images')[0].get('url')
-        volume_percent = response.get('device', {}).get('volume_percent', 50)  # Default 50% se não disponível
+        # Verifica se é string (caso inesperado)
+        if isinstance(playback, str):
+            return Response({'error': 'Resposta inválida da API'}, status=status.HTTP_502_BAD_GATEWAY)
 
-        # 2. Gêneros do artista (nova requisição)
-        artist_id = item.get('artists')[0].get('id')
-        artist_response = spotify_requests_execution(key, f"artists/{artist_id}")
-        genres = artist_response.get('genres', [])  # Ex: ["pop", "rock"]
+        # Tratamento de erros
+        if 'error' in playback:
+            error_msg = playback.get('error', {}).get('message', 'Erro desconhecido')
+            if 'expired' in str(error_msg).lower():
+                return redirect(AuthenticationURL)
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
 
-        # 3. Audio Features (nova requisição)
-        audio_features = spotify_requests_execution(key, f"audio-features/{song_id}")
-        
-        # 4. Cálculo de decibéis (fórmula: dB = 20 * log10(volume_percent / 100))
-        decibels = 20 * math.log10(volume_percent / 100) if volume_percent > 0 else -60  # -60 dB = silêncio
+        if 'item' not in playback:
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
 
-        # Dados consolidados
-        song = {
-            "id": song_id,
-            "title": title,
-            "artist": ", ".join([artist.get('name') for artist in item.get('artists')]),
-            "duration": duration,
-            "time": progress,
-            "album_cover": album_cover,
-            "is_playing": is_playing,
-            "volume_percent": volume_percent,
-            "decibels": round(decibels, 2),
-            "genres": genres,
-            "audio_features": audio_features  # danceability, energy, etc.
+        item = playback['item']
+        response_data = {
+            "id": item['id'],
+            "title": item['name'],
+            "artist": ", ".join([a['name'] for a in item['artists']]),
+            "duration": item['duration_ms'],
+            "time": playback.get('progress_ms', 0),
+            "album_cover": item['album']['images'][0]['url'],
+            "is_playing": playback.get('is_playing', False)
         }
 
-        if request.headers.get("X-Requested-With") == "XMLHttpRequest":  # AJAX request
-            #print(f"SONG INFO NOW: {song}")
-            return JsonResponse(song, status=200)
+        # Busca extras apenas quando necessário
+        if request.headers.get("X-Requested-With") != "XMLHttpRequest":
+            try:
+                # Gêneros do artista
+                artist = spotify_requests_execution(key, f"artists/{item['artists'][0]['id']}")
+                if isinstance(artist, dict):
+                    response_data['genres'] = artist.get('genres', [])
 
-        return render(request, 'current_song_template.html', {'song': song, "user_token":token, "user_key":key})
-        #return Response_status(song, status=status.HTTP_200_OK) #no 1º campo posso passar o que eu quiser desde que tenha um formato de dicionário, posso passar a Response toda, que tem informação de todas as coisas 
-        
+                # Audio Features
+                features = spotify_requests_execution(key, f"audio-features/{item['id']}")
+                if isinstance(features, dict):
+                    response_data['audio_features'] = features
+
+                # Volume e decibéis
+                device = playback.get('device', {})
+                volume = device.get('volume_percent', 50)
+                response_data['volume_percent'] = volume
+                response_data['decibels'] = 20 * math.log10(volume / 100) if volume > 0 else -60
+
+            except Exception as e:
+                print(f"Erro ao buscar extras: {str(e)}")
+
+        return Response(response_data) if request.headers.get("X-Requested-With") == "XMLHttpRequest" \
+            else render(request, 'current_song_template.html', {'song': response_data, "user_key": key})
+
 
 class SpotifyControls(APIView):
     def post(self, request, format=None):
@@ -190,20 +208,171 @@ class SpotifyControls(APIView):
         return Response_status({"message": f"Action {action} executed successfully"}, status=status.HTTP_200_OK)
 
 
-class HeartRateAPI(APIView):
-    def post(self, request):
-        session_key = request.data.get("session_key")
-        heart_rate = request.data.get("heart_rate")
+# views.py
+'''class HeartRateAPI(APIView):
+    def get(self, request):
+        session_key = request.GET.get("session_key")
+        print(f"Session Key recebida: {session_key}")
 
-        if not session_key or not heart_rate:
-            return Response_status({"error": "Dados incompletos"}, status=400)
+        if not session_key:
+            print("Erro1")
+            return Response({"error": "Parâmetro 'session_key' é obrigatório"}, status=400)
 
-        token = Token.objects.filter(user=session_key).first()
-        if not token:
-            return Response_status({"error": "Sessão inválida"}, status=404)
+        try:
+            token = Token.objects.get(user=session_key)
+        except Token.DoesNotExist:
+            print("Erro2")
+            return Response({"error": "Sessão não encontrada"}, status=404)
 
-        HeartRateData.objects.create(
-            user_session=token,
-            heart_rate=heart_rate
-        )
-        return Response_status({"message": "Dados salvos"}, status=200)
+        latest_hr = HeartRateData.objects.filter(user_session=token).order_by("-timestamp").first()
+
+        if not latest_hr:
+            print("Erro3")
+            return Response({"heart_rate": None}, status=200)  # Retorna vazio se não houver dados
+
+        print(latest_hr)
+        print(latest_hr.heart_rate)
+        return Response({"heart_rate": latest_hr.heart_rate})
+'''
+
+import json
+import os
+import math
+from datetime import datetime
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import status
+from django.shortcuts import redirect
+from .connect_garmin import get_latest_heart_rate
+from .extras import spotify_requests_execution
+
+JSON_FILE = "dados_ritmo.json"
+
+
+class SyncedHeartRateMusic(APIView):
+    def get(self, request):
+        session_key = request.GET.get("session_key")
+        if not session_key:
+            return Response({"error": "Parâmetro 'session_key' é obrigatório"}, status=400)
+
+
+
+        # 🩺 Obtém o último ritmo cardíaco
+        heart_rate = get_latest_heart_rate()
+        if heart_rate is None:
+            return Response({"error": "Nenhum dado de ritmo cardíaco disponível"}, status=404)
+
+        # 🎵 Obtém os dados da Música Atual
+        playback = spotify_requests_execution(session_key, "player/currently-playing")
+        print(f"Playback: {playback}")
+        if isinstance(playback, str) or 'error' in playback or 'item' not in playback:
+            return Response({'error': 'Erro ao obter música'}, status=status.HTTP_502_BAD_GATEWAY)
+
+        item = playback['item']
+
+
+        # 📢 Obtém volume/decibéis
+        track_id = item['id']  # ID da faixa atual
+        audio_features = spotify_requests_execution(session_key, f"audio-features/{track_id}")
+
+        # Verifica se a resposta é válida
+        print(f"audio_feat {audio_features}")
+        if isinstance(audio_features, dict) and 'loudness' in audio_features:
+            decibeis = audio_features['loudness']
+        else:
+            decibeis = -60  # Valor padrão se falhar
+
+
+        #print(f"ITEM: {item}")
+        musica = item['name']
+        artista = ", ".join([a['name'] for a in item['artists']])
+        genero = []
+
+        try:
+            artist_data = spotify_requests_execution(session_key, f"artists/{item['artists'][0]['id']}")
+            if isinstance(artist_data, dict):
+                genero = artist_data.get('genres', [])
+        except Exception:
+            pass
+
+        # 📂 Guarda os dados no JSON
+        entrada = {
+            "timestamp": datetime.now().isoformat(),
+            "ritmo_cardiaco": heart_rate,
+            "decibeis_musica": decibeis,
+            "musica": musica,
+            "genero": genero,
+            "artista": artista,
+        }
+
+        response_data={
+            "timestamp": datetime.now().isoformat(),
+            "ritmo_cardiaco": heart_rate,
+            "decibeis_musica": decibeis,
+            "musica": musica,
+            "genero": genero,
+            "artista": artista,
+            "album_cover": item['album']['images'][0]['url'],
+            "time": playback.get('progress_ms', 0),
+            "duration": item['duration_ms'],
+        }
+
+        self._guardar_json(entrada)
+
+        return Response(response_data, status=200)
+
+
+
+    def _guardar_json(self, entrada):
+        """Guarda a entrada no ficheiro JSON sem sobrescrever os anteriores."""
+        dados = []
+        if os.path.exists(JSON_FILE):
+            with open(JSON_FILE, "r") as f:
+                try:
+                    dados = json.load(f)
+                except json.JSONDecodeError:
+                    pass
+
+        dados.append(entrada)
+
+        with open(JSON_FILE, "w") as f:
+            json.dump(dados, f, indent=4)
+
+        #print(f"✅ Dados guardados: {entrada}")
+
+'''
+import json
+import os
+from datetime import datetime
+
+JSON_FILE = "dados_ritmo.json"
+
+
+def atualizar_dados(heart_rate=None, decibeis=None, musica=None, genero=None, artista=None):
+    """Atualiza o ficheiro JSON com os novos dados."""
+    dados = {}
+
+    # Se o ficheiro já existe, carregar os dados atuais
+    if os.path.exists(JSON_FILE):
+        with open(JSON_FILE, "r") as f:
+            try:
+                dados = json.load(f)
+            except json.JSONDecodeError:
+                pass  # Se houver erro, começa com um dicionário vazio
+
+    # Atualiza apenas os valores recebidos, mantendo os outros
+    dados.update({
+        "timestamp": datetime.now().isoformat(),
+        "ritmo_cardiaco": heart_rate if heart_rate is not None else dados.get("ritmo_cardiaco"),
+        "decibeis_musica": decibeis if decibeis is not None else dados.get("decibeis_musica"),
+        "musica": musica if musica is not None else dados.get("musica"),
+        "genero": genero if genero is not None else dados.get("genero"),
+        "artista": artista if artista is not None else dados.get("artista"),
+    })
+
+    # Guarda os dados no ficheiro
+    with open(JSON_FILE, "w") as f:
+        json.dump(dados, f, indent=4)
+
+    print("✅ JSON atualizado:", dados)
+'''

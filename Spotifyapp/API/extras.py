@@ -77,11 +77,10 @@ def refresh_token_function(session_id):
     )
 
 
-
 def spotify_requests_execution(session_id, endpoint):
     token = check_token(session_id)
     if not token:
-        return {'Error': 'Token inválido'}
+        return {'error': {'message': 'Token inválido'}}
 
     headers = {
         "Content-Type": "application/json",
@@ -89,29 +88,29 @@ def spotify_requests_execution(session_id, endpoint):
     }
 
     try:
-        # Endpoints que modificam estado (PUT/POST)
+        # Endpoints que modificam estado
         if endpoint in ["player/pause", "player/play"]:
             response = put(BASE_URL + endpoint, headers=headers)
         elif endpoint in ["player/next", "player/previous"]:
             response = post(BASE_URL + endpoint, headers=headers)
         else:
-            # Endpoints GET - Adiciona cache para evitar chamadas repetidas
-            if endpoint == "player/currently-playing":
-                response = get(BASE_URL + endpoint, headers=headers, timeout=2)
-                if response.status_code == 204:  # Sem conteúdo
-                    return {'status': 'no_playback'}
-            else:
-                response = get(BASE_URL + endpoint, headers=headers)
+            response = get(BASE_URL + endpoint, headers=headers)
 
+        # Tratamento consistente de respostas
         if not response.ok:
-            return {'Error': f"HTTP {response.status_code}"}
+            try:
+                return {'error': response.json()}
+            except:
+                return {'error': {'message': f"HTTP {response.status_code}"}}
 
-        return response.json() if response.content else {'status': 'empty'}
+        try:
+            return response.json() if response.content else {'status': 'no_content'}
+        except ValueError:
+            return {'error': {'message': 'Resposta inválida da API'}}
 
-    except requests.exceptions.RequestException as e:
-        print(f"Erro na requisição: {str(e)}")  # Log detalhado
-        return {'Error': str(e)}
-
+    except Exception as e:
+        print(f"Erro na requisição para {endpoint}: {str(e)}")
+        return {'error': {'message': str(e)}}
 
 def spotify_seek(session_id, position_ms):
     token = check_token(session_id)

@@ -53,244 +53,266 @@
         </div>
     </div>
 
+
+        </div>
+
+    </div>
+
+    <!-- Heart Rate Section -->
+<div id="heart-rate-section" class="mt-8 p-6 bg-gray-800 rounded-xl shadow-lg">
+    <h3 class="text-2xl font-bold mb-4 text-center">Heart Rate Monitor</h3>
+
+    <!-- Heart Rate Value with Animation -->
+    <div class="flex justify-center items-center space-x-4">
+        <div class="relative">
+            <!-- Heart Icon Pulse -->
+            <div id="heart-icon" class="text-red-500 text-8xl animate-pulse">❤️</div>
+            <!-- BPM Value -->
+            <div id="heart-rate-value" class="absolute inset-0 flex items-center justify-center text-white font-bold text-xl">
+                -- BPM
+            </div>
+        </div>
+
+        <!-- Visual Graph (Simple Bar for now) -->
+        <div class="w-32 h-32 bg-gray-700 rounded-full flex items-center justify-center">
+            <canvas id="heartRateChart" width="120" height="120"></canvas>
         </div>
     </div>
 
+    <!-- Volume vs. Heart Rate Correlation -->
+    <div class="mt-6 text-center">
+        <p id="volume-heart-correlation" class="text-gray-300">Volume: --% | Decibéis: -- dB</p>
+        <p id="genre-effect" class="text-sm text-gray-400">Género: -- | Efeito: --</p>
+    </div>
+</div>
+
+
+</body>
     <script>
         $(document).ready(function() {
 
-            //Progress Bar
-            const progressBar = document.getElementById("progress-bar");
-            const currentTimeLabel = document.getElementById("current-time");
-            const totalTimeLabel = document.getElementById("total-time");
-            const songDuration = "{{ song.duration }}";
-            const durationInMs = parseInt(songDuration, 10);
-            const songTitle = document.getElementById("song-title");
-            const albumCover = document.getElementById("album-cover");
-            //console.log("Parsed Duration:", durationInMs);
-            let currentSongTitle = sessionStorage.getItem("currentSongTitle") || "";
-            let interval;
+        // Elementos da página
+        const progressBar = document.getElementById("progress-bar");
+        const currentTimeLabel = document.getElementById("current-time");
+        const totalTimeLabel = document.getElementById("total-time");
+        const songTitleElement = document.getElementById("song-title"); // <h3 id="song-title">
+        const albumCover = document.getElementById("album-cover");
+        const heartRateValueElement = $("#heart-rate-value");
+        const volumeCorrelationElement = $("#volume-heart-correlation");
+        const genreEffectElement = $("#genre-effect");
 
-            // Function to format milliseconds to mm:ss
-            function formatTime(ms) {
-                const minutes = Math.floor(ms / 60000);
-                const seconds = Math.floor((ms % 60000) / 1000).toString().padStart(2, '0');
-                return `${minutes}:${seconds}`;
-            }
+        // A session key é passada pelo Django via template
+        const userKey = "{{ user_key }}";
 
-            // Update progress bar and time labels periodically
+        // Função para formatar milissegundos para mm:ss
+        function formatTime(ms) {
+            const minutes = Math.floor(ms / 60000);
+            const seconds = Math.floor((ms % 60000) / 1000).toString().padStart(2, '0');
+            return `${minutes}:${seconds}`;
+        }
 
-            function updateProgressBar() {
-                const progressBar = document.getElementById("progress-bar");
-                //console.log(progressBar);
-                const key = "{{ user_key }}"; // Ensure this is passed correctly from Django
-
-                fetch(`/spotify/current-song?key=${key}`, {
-                    method: "GET",
-                    headers: { "X-Requested-With": "XMLHttpRequest" },
+        // Função para atualizar a UI com os dados sincronizados
+        function fetchSyncedData() {
+            fetch(`/spotify/api/synced-data/?session_key=${userKey}`, {
+                method: "GET",
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
                 })
-                    .then((response) => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then((data) => {
-                        //console.log(data);
-                        const currentPosition = data.time;
-                        const songDuration = data.duration;
+                .then(data => {
+                    // Atualiza informações da música e ritmo cardíaco
 
-                        // Dynamically set the max value of the progress bar if it's not set yet
-                        if (progressBar.max !== songDuration) {
-                            progressBar.max = songDuration;
-                        }
+                    // Atualiza o título da música e artista se mudou
+                    if (data.musica && songTitleElement) {
+                        songTitleElement.textContent = `${data.musica} - ${data.artista}`;
+                    }
 
-                        // Set the current progress
-                        progressBar.value = (currentPosition);
-                        //console.log(progressBar.value)
-                        // Optionally update time labels
-                        const currentTimeLabel = document.getElementById("current-time");
-                        currentTimeLabel.textContent = formatTime(currentPosition);
-                    })
-                    .catch((error) => {
-                        console.error("Error updating progress bar:", error);
-                    });
-            }
+                    // Atualiza a imagem do álbum
+                    if (data.album_cover && albumCover) {
+                        albumCover.src = data.album_cover;
+                    }
 
-
-            // Seek to a specific position in the song
-            progressBar.addEventListener("change", function () {
-                console.log("AAAAAAAAAAAAA");
-                const newPosition = progressBar.value;
-                console.log(newPosition);
-                $.ajax({
-                    url: "/spotify/controls/", // SpotifyControls endpoint
-                    type: "POST",
-                    data: {
-                        key: "{{ user_key }}", // Pass the session key
-                        action: "seek",
-                        position: newPosition,
-                    },
-                    success: function () {
-                        updateProgressBar(); // Ensure progress bar syncs after seeking
-                    },
-                });
-            });
-
-            // Start the interval to update the progress bar
-            interval = setInterval(updateProgressBar, 1000); // Update every second
-
-
-            // Clean up interval on page unload
-            window.addEventListener("beforeunload", () => clearInterval(interval));
-
-            
-            // Function to fetch song info
-            function fetchSongInfo() {
-                const key = "{{ user_key }}"; // Ensure this is passed correctly from Django
-
-                fetch(`/spotify/current-song?key=${key}`, {
-                    method: "GET",
-                    headers: { "X-Requested-With": "XMLHttpRequest" },
-                })
-                    .then((response) => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then((data) => {
-                        // Check if the song title has changed
-                        console.log(data.title);
-                        console.log(currentSongTitle);
-                        if (data.title !== currentSongTitle) {
-                            // Update stored title in sessionStorage
-                            console.log("A ALTERAR");
-                            
-                            currentSongTitle = data.title;
-                            sessionStorage.setItem("currentSongTitle", currentSongTitle);
-
-                            // Update song title and album cover in the DOM
-                            songTitle.textContent = `${data.title} - ${data.artist}`;
-                        } else if (!songTitle) {
-                            console.error("Elemento 'song-title' não encontrado no DOM.");
-                        }
-
-                        if (albumCover) {
-                            albumCover.src = data.album_cover;
-                        } else {
-                            console.error("Elemento 'album-cover' não encontrado no DOM.");
-                        }
-
-                        // Log the update for debugging purposes
-                        console.log(`Updated to new song: ${data.title}`);
-
-                        // Update the progress bar and current time
+                    // Atualiza a progress bar se os dados de tempo estiverem disponíveis
+                    if (data.duration && typeof data.time !== "undefined") {
                         progressBar.max = data.duration;
                         progressBar.value = data.time;
                         currentTimeLabel.textContent = formatTime(data.time);
-                    })
-                    .catch((error) => {
-                        console.error("Error fetching song info:", error);
-                    });
-            }
-
-            // Periodically fetch song info 
-            setInterval(fetchSongInfo, 1000);
-
-
-            // Skip Button
-            $("#skip-btn").click(function() {
-                var key = "{{ user_key }}";  // Pass the key value from the template
-
-                $.ajax({
-                    url: "/spotify/controls/",  // URL for skip action
-                    type: "POST",
-                    data: {
-                        key: key,
-                        action: "skip",  // Add action for skipping to next song
-                    },
-                    success: function(response) {
-                        console.log("Skipped to next song:", response);
-                        // Optionally update UI to reflect the new song
-                    },
-                    error: function(response) {
-                        console.error("Skip action failed:", response);
+                        totalTimeLabel.textContent = formatTime(data.duration);
                     }
-                });
-            });
-            
-            $("#previous-btn").click(function() {
-                var key = "{{ user_key }}";  // Pass the key value from the template
 
-                $.ajax({
-                    url: "/spotify/controls/",  // URL for previous action
-                    type: "POST",
-                    data: {
-                        key: key,
-                        action: "previous",  // Add action for going back to previous song
-                    },
-                    success: function(response) {
-                        console.log("Went to previous song:", response);
-                        // Optionally update UI to reflect the new song
-                    },
-                    error: function(response) {
-                        console.error("Previous action failed:", response);
+                    // Atualiza o valor do heart rate
+                    if (data.ritmo_cardiaco) {
+                        heartRateValueElement.text(`${data.ritmo_cardiaco} BPM`);
+                        // Ajusta a velocidade da animação do coração (pulse) com base no BPM
+                        const pulseSpeed = Math.max(500, 2000 - (data.ritmo_cardiaco * 10));
+                        $("#heart-icon").css("animation-duration", `${pulseSpeed}ms`);
                     }
-                });
-            });
 
-            // Play/Pause button
-            $("#play-pause-btn").click(function() {
-                var action = $(this).data("action");
-                var key = "{{ user_key }}";  // Pass the key value from the template
-
-                $.ajax({
-                    url: "/spotify/controls/",  // URL of the SpotifyControls view
-                    type: "POST",
-                    data: {
-                        key: key,
-                        action: action,
-                    },
-                    success: function(response) {
-                        console.log("Action successful:", response);
-                        // Toggle button text based on action
-                        if (action === "resume") {
-                            $("#play-pause-btn").data("action", "stop").text("Pause");
-                        } else {
-                            $("#play-pause-btn").data("action", "resume").text("Play");
-                        }
-                    },
-                    error: function(response) {
-                        console.error("Action failed:", response);
+                    // Atualiza a correlação de volume/decibéis, se esses dados estiverem presentes
+                    if (data.decibeis_musica) {
+                        volumeCorrelationElement.text(`Volume: ${data.volume_percent || "--"}% | Decibéis: ${data.decibeis_musica} dB`);
                     }
-                });
-            });
 
-            // Stop button
-            $("#stop-btn").click(function() {
-                var action = $(this).data("action");
-                var key = "{{ user_key }}";  // Pass the key value from the template
-
-                $.ajax({
-                    url: "/spotify/controls/",  // URL of the SpotifyControls view
-                    type: "POST",
-                    data: {
-                        key: key,
-                        action: action,
-                    },
-                    success: function(response) {
-                        console.log("Action successful:", response);
-                        // Disable the stop button after it's clicked
-                        $("#stop-btn").prop("disabled", true);
-                        
-                    },
-                    error: function(response) {
-                        console.error("Action failed:", response);
+                    // Atualiza o gênero e efeito (exemplo)
+                    if (data.genero) {
+                        const genStr = Array.isArray(data.genero) && data.genero.length > 0 ? data.genero.join(", ") : "--";
+                        genreEffectElement.text(`Género: ${genStr} | Efeito: ${data.ritmo_cardiaco > 100 ? 'Alto' : 'Moderado'}`);
                     }
+                })
+                .catch(error => {
+                    console.error("Erro ao buscar dados sincronizados:", error);
                 });
+        }
+
+        // Atualiza a progress bar e demais dados a cada 10 segundos
+        setInterval(fetchSyncedData, 2000);
+
+        // As demais funcionalidades (seek, play/pause, skip, previous, heart rate polling) podem continuar como já estão.
+        // Por exemplo, a função updateProgressBar e fetchSongInfo podem ser removidas ou integradas ao fetchSyncedData,
+        // se desejado, para centralizar a atualização.
+
+        // Exemplo de integração com controle (mantém os botões inalterados):
+        $("#skip-btn").click(function() {
+            $.ajax({
+                url: "/spotify/controls/",
+                type: "POST",
+                data: {
+                    key: userKey,
+                    action: "skip",
+                },
+                success: function(response) {
+                    console.log("Skipped to next song:", response);
+                },
+                error: function(response) {
+                    console.error("Skip action failed:", response);
+                }
             });
         });
+
+        $("#previous-btn").click(function() {
+            $.ajax({
+                url: "/spotify/controls/",
+                type: "POST",
+                data: {
+                    key: userKey,
+                    action: "previous",
+                },
+                success: function(response) {
+                    console.log("Went to previous song:", response);
+                },
+                error: function(response) {
+                    console.error("Previous action failed:", response);
+                }
+            });
+        });
+
+        $("#play-pause-btn").click(function() {
+            var action = $(this).data("action");
+            $.ajax({
+                url: "/spotify/controls/",
+                type: "POST",
+                data: {
+                    key: userKey,
+                    action: action,
+                },
+                success: function(response) {
+                    console.log("Action successful:", response);
+                    if (action === "resume") {
+                        $("#play-pause-btn").data("action", "stop").text("Pause");
+                    } else {
+                        $("#play-pause-btn").data("action", "resume").text("Play");
+                    }
+                },
+                error: function(response) {
+                    console.error("Action failed:", response);
+                }
+            });
+        });
+
+        $("#stop-btn").click(function() {
+            $.ajax({
+                url: "/spotify/controls/",
+                type: "POST",
+                data: {
+                    key: userKey,
+                    action: "stop",
+                },
+                success: function(response) {
+                    console.log("Action successful:", response);
+                    $("#stop-btn").prop("disabled", true);
+                },
+                error: function(response) {
+                    console.error("Action failed:", response);
+                }
+            });
+        });
+
+
+
+            // Heart Rate Real-Time Updates
+            let heartRateHistory = [];
+            const MAX_HISTORY = 20; // Keep last 20 readings for the chart
+
+            function updateHeartRate(bpm) {
+                // Update BPM Text
+                $("#heart-rate-value").text(`${bpm} BPM`);
+
+                // Adjust heart icon pulse speed based on BPM (faster for higher BPM)
+                const pulseSpeed = Math.max(500, 2000 - (bpm * 10));
+                $("#heart-icon").css("animation-duration", `${pulseSpeed}ms`);
+
+                // Store data for chart
+                heartRateHistory.push(bpm);
+                if (heartRateHistory.length > MAX_HISTORY) {
+                    heartRateHistory.shift();
+                }
+
+                updateHeartRateChart();
+            }
+
+            // Chart.js for Heart Rate Visualization
+            let heartRateChart = null;
+            function updateHeartRateChart() {
+                const ctx = document.getElementById('heartRateChart').getContext('2d');
+
+                if (heartRateChart) {
+                    heartRateChart.destroy();
+                }
+
+                heartRateChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: Array(heartRateHistory.length).fill(''),
+                        datasets: [{
+                            label: 'Heart Rate',
+                            data: heartRateHistory,
+                            borderColor: '#ef4444', // Tailwind red-500
+                            tension: 0.4,
+                            fill: false,
+                            pointRadius: 0
+                        }]
+                    },
+                    options: {
+                        responsive: false,
+                        scales: {
+                            y: {
+                                min: Math.max(40, Math.min(...heartRateHistory) - 10),
+                                max: Math.min(180, Math.max(...heartRateHistory) + 10)
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+            }
+        }
+
+            );
     </script>
 
     <style>
@@ -308,7 +330,25 @@
         .animate-spin-fast {
             animation: spin-fast 7s linear infinite; /* time to do a whole spin */
         }
+
+        /* Heart Pulse Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .animate-pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Chart Container Styling */
+        #heartRateChart {
+            background-color: rgba(55, 65, 81, 0.5); /* bg-gray-700 with opacity */
+            border-radius: 50%;
+            padding: 8px;
+        }
     </style>
 
-</body>
+
 </html>
