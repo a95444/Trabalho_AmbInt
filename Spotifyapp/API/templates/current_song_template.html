@@ -153,14 +153,25 @@
                     }
 
                     // Atualiza a correlação de volume/decibéis, se esses dados estiverem presentes
-                    if (data.decibeis_musica) {
-                        volumeCorrelationElement.text(`Volume: ${data.volume_percent || "--"}% | Decibéis: ${data.decibeis_musica} dB`);
+                    if (data.volume) {
+                        volumeCorrelationElement.text(`Volume: ${data.volume || "--"}% | Decibéis: ${data.decibeis_musica} dB`);
                     }
 
                     // Atualiza o gênero e efeito (exemplo)
                     if (data.genero) {
                         const genStr = Array.isArray(data.genero) && data.genero.length > 0 ? data.genero.join(", ") : "--";
-                        genreEffectElement.text(`Género: ${genStr} | Efeito: ${data.ritmo_cardiaco > 100 ? 'Alto' : 'Moderado'}`);
+                        // Determina o efeito com base no ritmo cardíaco
+                        let efeito;
+                        if (data.ritmo_cardiaco > 80) {
+                            efeito = "Estimulante";
+                        } else if (data.ritmo_cardiaco >= 65 && data.ritmo_cardiaco <= 79) {
+                            efeito = "Normal";
+                        } else {
+                            efeito = "Calmante";
+                        }
+
+                        // Atualiza o texto do elemento
+                        genreEffectElement.text(`Género: ${genStr} | Efeito: ${efeito}`);
                     }
                 })
                 .catch(error => {

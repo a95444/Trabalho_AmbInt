@@ -7,6 +7,7 @@ from.credentials import *
 
 
 BASE_URL='https://api.spotify.com/v1/me/'
+BASE_URL_ARTISTS='https://api.spotify.com/v1/'
 
 # 1- Check Tokens
 
@@ -41,8 +42,6 @@ def create_or_update_tokens(session_id, access_token, refresh_token, expires_in,
             token_type = token_type,
         )
         tokens.save()
-
-
 
 def is_spotify_authenticated(session_id):
     tokens = check_token(session_id)
@@ -112,6 +111,47 @@ def spotify_requests_execution(session_id, endpoint):
         print(f"Erro na requisição para {endpoint}: {str(e)}")
         return {'error': {'message': str(e)}}
 
+def spotify_requests_artists(session_id, endpoint):
+    token = check_token(session_id)
+    if not token:
+        return {'error': {'message': 'Token inválido'}}
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {token.access_token}"
+    }
+
+    print(f"Bearer {token.access_token}")
+
+    try:
+        # Endpoints que modificam estado
+        if "artists/" in endpoint:
+            response = get(BASE_URL_ARTISTS + endpoint, headers=headers)
+            #print(f"url artists: {BASE_URL_ARTISTS + endpoint}")
+
+        elif "audio-features/" in endpoint:
+            response = get(BASE_URL_ARTISTS + endpoint, headers=headers)
+            print(f"url audio: {BASE_URL_ARTISTS + endpoint}")
+        else:
+            response = get(BASE_URL + endpoint, headers=headers)
+
+        # Tratamento consistente de respostas
+        if not response.ok:
+            try:
+                return {'error': response.json()}
+            except:
+                return {'error': {'message': f"HTTP {response.status_code}"}}
+
+        try:
+            return response.json() if response.content else {'status': 'no_content'}
+        except ValueError:
+            return {'error': {'message': 'Resposta inválida da API'}}
+
+    except Exception as e:
+        print(f"Erro na requisição para {endpoint}: {str(e)}")
+        return {'error': {'message': str(e)}}
+
+
 def spotify_seek(session_id, position_ms):
     token = check_token(session_id)
     headers = {
@@ -135,3 +175,17 @@ def spotify_seek(session_id, position_ms):
         except requests.exceptions.JSONDecodeError:
             # If JSON decoding fails, handle the error gracefully
             return {"success": False, "message": "Seek failed, no JSON response", "details": response.text}
+
+
+
+from ctypes import cast, POINTER
+from comtypes import CLSCTX_ALL
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+
+def get_system_volume():
+    devices = AudioUtilities.GetSpeakers()
+    interface = devices.Activate(
+        IAudioEndpointVolume._iid_, CLSCTX_ALL, None
+    )
+    volume = cast(interface, POINTER(IAudioEndpointVolume))
+    return volume.GetMasterVolumeLevelScalar() * 100  # Retorna em %

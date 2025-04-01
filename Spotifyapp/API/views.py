@@ -17,7 +17,7 @@ from django.shortcuts import render
 
 class AuthenticationURL(APIView):
     def get(self, request, format=None):
-        scopes="user-read-currently-playing user-read-playback-state user-modify-playback-state  "
+        scopes="user-read-currently-playing user-read-playback-state user-modify-playback-state user-read-private user-read-email"
         url= Request('GET', 'https://accounts.spotify.com/authorize',
                      params= {
                          'scope': scopes,
@@ -273,48 +273,42 @@ class SyncedHeartRateMusic(APIView):
 
         # 📢 Obtém volume/decibéis
         track_id = item['id']  # ID da faixa atual
-        audio_features = spotify_requests_execution(session_key, f"audio-features/{track_id}")
+        volume = int(get_system_volume())
+        #print(f"volume {volume}")
 
-        # Verifica se a resposta é válida
-        print(f"audio_feat {audio_features}")
-        if isinstance(audio_features, dict) and 'loudness' in audio_features:
-            decibeis = audio_features['loudness']
-        else:
-            decibeis = -60  # Valor padrão se falhar
-
+        artist_id = playback['item']['artists'][0]['id']
+        #print(f"Artist id {artist_id}")
+        artist_data = spotify_requests_artists(session_key, f"artists/{artist_id}")
+        #print(f"Artist data {artist_data}")
+        generos = artist_data['genres']
+        artista = artist_data['name']
 
         #print(f"ITEM: {item}")
         musica = item['name']
-        artista = ", ".join([a['name'] for a in item['artists']])
-        genero = []
 
-        try:
-            artist_data = spotify_requests_execution(session_key, f"artists/{item['artists'][0]['id']}")
-            if isinstance(artist_data, dict):
-                genero = artist_data.get('genres', [])
-        except Exception:
-            pass
 
         # 📂 Guarda os dados no JSON
         entrada = {
             "timestamp": datetime.now().isoformat(),
             "ritmo_cardiaco": heart_rate,
-            "decibeis_musica": decibeis,
+            "decibeis_musica": 0,
             "musica": musica,
-            "genero": genero,
+            "genero": generos,
             "artista": artista,
+            "volume":volume
         }
 
         response_data={
             "timestamp": datetime.now().isoformat(),
             "ritmo_cardiaco": heart_rate,
-            "decibeis_musica": decibeis,
+            "decibeis_musica": 0,
             "musica": musica,
-            "genero": genero,
+            "genero": generos,
             "artista": artista,
             "album_cover": item['album']['images'][0]['url'],
             "time": playback.get('progress_ms', 0),
             "duration": item['duration_ms'],
+            "volume": volume
         }
 
         self._guardar_json(entrada)
