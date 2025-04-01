@@ -62,7 +62,13 @@ def spotify_redirect(request, format=None):
     )
     # Inicia o listener do Garmin após a autenticação
     from .connect_garmin import start_garmin_listener
-    start_garmin_listener()
+    print("⏳ A conectar ao Garmin antes de redirecionar...")
+    garmin_ready = start_garmin_listener()
+
+    if garmin_ready:
+        print("✅ Garmin conectado! Redirecionando para a página atual...")
+    else:
+        print("❌ Falha na conexão com o Garmin, mas continuando mesmo assim...")
 
     #create a redirect url to the current song details
     redirect_url = f"http://127.0.0.1:8000/spotify/current-song?key={authKey}" #recebe o parametro que vem da classe currentsong
@@ -294,8 +300,10 @@ class SyncedHeartRateMusic(APIView):
             "ritmo_cardiaco": heart_rate,
             "decibeis_musica": 0,
             "musica": musica,
+            "musica_id": track_id,
             "genero": generos,
             "artista": artista,
+            "artista_id": artist_id,
             "volume":volume
         }
 

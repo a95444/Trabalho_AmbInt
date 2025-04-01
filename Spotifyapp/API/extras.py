@@ -182,13 +182,34 @@ def spotify_seek(session_id, position_ms):
 
 
 from ctypes import cast, POINTER
-from comtypes import CLSCTX_ALL
+from comtypes import CLSCTX_ALL, CoInitialize, CoUninitialize
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
-def get_system_volume():
+'''def get_system_volume():
     devices = AudioUtilities.GetSpeakers()
     interface = devices.Activate(
         IAudioEndpointVolume._iid_, CLSCTX_ALL, None
     )
     volume = cast(interface, POINTER(IAudioEndpointVolume))
     return volume.GetMasterVolumeLevelScalar() * 100  # Retorna em %
+
+'''
+def get_system_volume():
+    try:
+        CoInitialize()  # Inicializa o COM
+        devices = AudioUtilities.GetSpeakers()
+        if not devices:
+            return 0  # Retorna 0 se não houver dispositivos
+
+        interface = devices.Activate(
+            IAudioEndpointVolume._iid_,
+            CLSCTX_ALL, None
+        )
+        volume_interface = cast(interface, POINTER(IAudioEndpointVolume))
+
+        volume = volume_interface.GetMasterVolumeLevelScalar() * 100  # Converte para percentual
+        return int(volume)
+
+    except Exception as e:
+        print(f"Erro ao obter volume do sistema: {e}")
+        return 0  # Retorna 0 em caso de erro
