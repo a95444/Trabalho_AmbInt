@@ -65,10 +65,12 @@ def spotify_redirect(request, format=None):
     print("⏳ A conectar ao Garmin antes de redirecionar...")
     garmin_ready = start_garmin_listener()
 
+    while not garmin_ready:
+        print("❌ Falha na conexão com o Garmin, a tentar novamente...")
+        garmin_ready = start_garmin_listener()
+
     if garmin_ready:
         print("✅ Garmin conectado! Redirecionando para a página atual...")
-    else:
-        print("❌ Falha na conexão com o Garmin, mas continuando mesmo assim...")
 
     #create a redirect url to the current song details
     redirect_url = f"http://127.0.0.1:8000/spotify/current-song?key={authKey}" #recebe o parametro que vem da classe currentsong

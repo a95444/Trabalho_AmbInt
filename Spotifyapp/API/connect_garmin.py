@@ -18,6 +18,7 @@ def update_heart_rate(heart_rate):
 async def _initial_garmin_connection():
     """Tenta conectar ao Garmin e retorna True se for bem-sucedido"""
     global garmin_connected
+    print("Initial Garmin Connection")
     try:
         async with BleakClient(GARMIN_ADDRESS) as client:
             print(f"✅ Conectado ao Garmin {GARMIN_ADDRESS}")
