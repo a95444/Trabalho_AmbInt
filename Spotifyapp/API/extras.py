@@ -78,6 +78,7 @@ def refresh_token_function(session_id):
 
 def spotify_requests_execution(session_id, endpoint):
     token = check_token(session_id)
+
     if not token:
         return {'error': {'message': 'Token inválido'}}
 
@@ -89,8 +90,10 @@ def spotify_requests_execution(session_id, endpoint):
     try:
         # Endpoints que modificam estado
         if endpoint in ["player/pause", "player/play"]:
+            print("REQUESTE DOS BOTÕES CHEGOU")
             response = put(BASE_URL + endpoint, headers=headers)
         elif endpoint in ["player/next", "player/previous"]:
+            print("REQUESTE DOS BOTÕES CHEGOU")
             response = post(BASE_URL + endpoint, headers=headers)
         else:
             response = get(BASE_URL + endpoint, headers=headers)
@@ -121,7 +124,7 @@ def spotify_requests_artists(session_id, endpoint):
         "Authorization": f"Bearer {token.access_token}"
     }
 
-    print(f"Bearer {token.access_token}")
+    #print(f"Bearer {token.access_token}")
 
     try:
         # Endpoints que modificam estado

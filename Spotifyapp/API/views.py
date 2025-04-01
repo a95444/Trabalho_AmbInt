@@ -104,70 +104,70 @@ class CurrentSong(APIView):
 
     def get(self, request, format=None):
         key = request.GET.get(self.kwarg)
-        token = Token.objects.filter(user=key).first()
+        token = Token.objects.filter(user=key)
+        # print(token)
 
-        if not token:
-            return Response({'error': 'Token inválido'}, status=status.HTTP_401_UNAUTHORIZED)
+        # create an endpoint
+        endpoint = "player/currently-playing"
+        playback = spotify_requests_execution(key, endpoint)
 
-        # Obtém o estado atual
-        playback = spotify_requests_execution(key, "player/currently-playing")
+        if "error" in playback or "item" not in playback:
+            # print(f"RESPONSE: {response}")
+            try:
+                if 'token expired' in playback['error']['message']:
+                    # print("CORRI CRLH")
+                    return redirect(AuthenticationURL)
+            except:
+                return Response_status({}, status=204)  # Use numeric status code directly
 
-        # Verifica se é string (caso inesperado)
-        if isinstance(playback, str):
-            return Response({'error': 'Resposta inválida da API'}, status=status.HTTP_502_BAD_GATEWAY)
 
-        # Tratamento de erros
-        if 'error' in playback:
-            error_msg = playback.get('error', {}).get('message', 'Erro desconhecido')
-            if 'expired' in str(error_msg).lower():
-                return redirect(AuthenticationURL)
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
+        # print(f"Playback: {playback}")
 
-        if 'item' not in playback:
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
+        if isinstance(playback, str) or 'error' in playback or 'item' not in playback:
+            return Response({'error': 'Erro ao obter música'}, status=status.HTTP_502_BAD_GATEWAY)
 
         item = playback['item']
-        response_data = {
-            "id": item['id'],
-            "title": item['name'],
-            "artist": ", ".join([a['name'] for a in item['artists']]),
-            "duration": item['duration_ms'],
-            "time": playback.get('progress_ms', 0),
+
+        # 📢 Obtém volume/decibéis
+        track_id = item['id']  # ID da faixa atual
+        volume = int(get_system_volume())
+        # print(f"volume {volume}")
+
+        artist_id = playback['item']['artists'][0]['id']
+        # print(f"Artist id {artist_id}")
+        artist_data = spotify_requests_artists(key, f"artists/{artist_id}")
+        # print(f"Artist data {artist_data}")
+        generos = artist_data['genres']
+        artista = artist_data['name']
+
+        # print(f"ITEM: {item}")
+        musica = item['name']
+
+        song = {
+            "id": track_id,
+            "title": musica,
+            "artist": artista,
             "album_cover": item['album']['images'][0]['url'],
-            "is_playing": playback.get('is_playing', False)
+            "time": playback.get('progress_ms', 0),
+            "duration": item['duration_ms'],
         }
+        '''        print(song)
+        print(f"CURRENT SONG Key: {key}")
+        print(f"CURRENT SONG Token: {Token.objects.filter(user=key)}")'''
 
-        # Busca extras apenas quando necessário
-        if request.headers.get("X-Requested-With") != "XMLHttpRequest":
-            try:
-                # Gêneros do artista
-                artist = spotify_requests_execution(key, f"artists/{item['artists'][0]['id']}")
-                if isinstance(artist, dict):
-                    response_data['genres'] = artist.get('genres', [])
+        if request.headers.get("X-Requested-With") == "XMLHttpRequest":  # AJAX request
+            # print(f"SONG INFO NOW: {song}")
+            return JsonResponse(song, status=200)
 
-                # Audio Features
-                features = spotify_requests_execution(key, f"audio-features/{item['id']}")
-                if isinstance(features, dict):
-                    response_data['audio_features'] = features
-
-                # Volume e decibéis
-                device = playback.get('device', {})
-                volume = device.get('volume_percent', 50)
-                response_data['volume_percent'] = volume
-                response_data['decibels'] = 20 * math.log10(volume / 100) if volume > 0 else -60
-
-            except Exception as e:
-                print(f"Erro ao buscar extras: {str(e)}")
-
-        return Response(response_data) if request.headers.get("X-Requested-With") == "XMLHttpRequest" \
-            else render(request, 'current_song_template.html', {'song': response_data, "user_key": key})
+        return render(request, 'current_song_template.html', {'song': song, "user_token": token, "user_key": key})
+        # return Response_status(song, status=status.HTTP_200_OK) #no 1º campo posso passar o que eu quiser desde que tenha um formato de dicionário, posso passar a Response toda, que tem informação de todas as coisas
 
 
 class SpotifyControls(APIView):
     def post(self, request, format=None):
         key = request.data.get("key")
         action = request.data.get("action")  # 'resume', 'stop', 'seek', etc.
-
+        print("O URL FUNCIONOU E TOU AQUI")
         if not key or not action:
             return Response_status({"error": "Missing key or action"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -264,7 +264,8 @@ class SyncedHeartRateMusic(APIView):
 
         # 🎵 Obtém os dados da Música Atual
         playback = spotify_requests_execution(session_key, "player/currently-playing")
-        print(f"Playback: {playback}")
+        #print(f"Playback: {playback}")
+
         if isinstance(playback, str) or 'error' in playback or 'item' not in playback:
             return Response({'error': 'Erro ao obter música'}, status=status.HTTP_502_BAD_GATEWAY)
 

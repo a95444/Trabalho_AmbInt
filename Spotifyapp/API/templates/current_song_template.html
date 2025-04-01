@@ -182,54 +182,63 @@
         // Atualiza a progress bar e demais dados a cada 10 segundos
         setInterval(fetchSyncedData, 2000);
 
-        // As demais funcionalidades (seek, play/pause, skip, previous, heart rate polling) podem continuar como já estão.
-        // Por exemplo, a função updateProgressBar e fetchSongInfo podem ser removidas ou integradas ao fetchSyncedData,
-        // se desejado, para centralizar a atualização.
 
         // Exemplo de integração com controle (mantém os botões inalterados):
-        $("#skip-btn").click(function() {
-            $.ajax({
-                url: "/spotify/controls/",
-                type: "POST",
-                data: {
-                    key: userKey,
-                    action: "skip",
-                },
-                success: function(response) {
-                    console.log("Skipped to next song:", response);
-                },
-                error: function(response) {
-                    console.error("Skip action failed:", response);
-                }
-            });
-        });
+       // Skip Button
+        // Skip Button
+            $("#skip-btn").click(function() {
+                var key = "{{ user_key }}";  // Pass the key value from the template
 
+                $.ajax({
+                    url: "/spotify/controls/",  // URL for skip action
+                    type: "POST",
+                    data: {
+                        key: key,
+                        action: "skip",  // Add action for skipping to next song
+                    },
+                    success: function(response) {
+                        console.log("Skipped to next song:", response);
+                        // Optionally update UI to reflect the new song
+                    },
+                    error: function(response) {
+                        console.error("Skip action failed:", response);
+                    }
+                });
+            });
+
+
+        // Previous Button
         $("#previous-btn").click(function() {
             $.ajax({
                 url: "/spotify/controls/",
-                type: "POST",
-                data: {
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
                     key: userKey,
-                    action: "previous",
-                },
+                    action: "previous"
+                }),
+                dataType: "json",
                 success: function(response) {
                     console.log("Went to previous song:", response);
                 },
-                error: function(response) {
-                    console.error("Previous action failed:", response);
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error("Previous action failed:", textStatus, errorThrown, jqXHR.responseText);
                 }
             });
         });
 
+        // Play/Pause Button
         $("#play-pause-btn").click(function() {
             var action = $(this).data("action");
             $.ajax({
                 url: "/spotify/controls/",
-                type: "POST",
-                data: {
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
                     key: userKey,
-                    action: action,
-                },
+                    action: action
+                }),
+                dataType: "json",
                 success: function(response) {
                     console.log("Action successful:", response);
                     if (action === "resume") {
@@ -238,26 +247,29 @@
                         $("#play-pause-btn").data("action", "resume").text("Play");
                     }
                 },
-                error: function(response) {
-                    console.error("Action failed:", response);
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error("Action failed:", textStatus, errorThrown, jqXHR.responseText);
                 }
             });
         });
 
+        // Stop Button
         $("#stop-btn").click(function() {
             $.ajax({
                 url: "/spotify/controls/",
-                type: "POST",
-                data: {
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
                     key: userKey,
-                    action: "stop",
-                },
+                    action: "stop"
+                }),
+                dataType: "json",
                 success: function(response) {
                     console.log("Action successful:", response);
                     $("#stop-btn").prop("disabled", true);
                 },
-                error: function(response) {
-                    console.error("Action failed:", response);
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error("Action failed:", textStatus, errorThrown, jqXHR.responseText);
                 }
             });
         });
