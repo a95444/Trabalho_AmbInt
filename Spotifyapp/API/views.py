@@ -53,13 +53,16 @@ def spotify_redirect(request, format=None):
         request.session.create()
         authKey = request.session.session_key
 
-    create_or_update_tokens(
-        session_id=authKey,
-        access_token=access_token,
-        refresh_token=refresh_token,
-        expires_in=expires_in,
-        token_type=token_type,
-    )
+    try:
+        create_or_update_tokens(
+            session_id=authKey,
+            access_token=access_token,
+            refresh_token=refresh_token,
+            expires_in=expires_in,
+            token_type=token_type,
+        )
+    except Exception as e:
+        pass
     # Inicia o listener do Garmin após a autenticação
     from .connect_garmin import start_garmin_listener
     print("⏳ A conectar ao Garmin antes de redirecionar...")
@@ -345,39 +348,63 @@ class SyncedHeartRateMusic(APIView):
 
         #print(f"✅ Dados guardados: {entrada}")
 
-'''
-import json
-import os
-from datetime import datetime
 
-JSON_FILE = "dados_ritmo.json"
+# views.py
+from django.http import JsonResponse
+from .extract_info import calcular_media_ritmo_por_artista, calcular_media_ritmo_por_genero
 
 
-def atualizar_dados(heart_rate=None, decibeis=None, musica=None, genero=None, artista=None):
-    """Atualiza o ficheiro JSON com os novos dados."""
-    dados = {}
-
-    # Se o ficheiro já existe, carregar os dados atuais
-    if os.path.exists(JSON_FILE):
-        with open(JSON_FILE, "r") as f:
+def artist_stats(request):
+    try:
+        with open(JSON_FILE, 'r') as f:
             try:
-                dados = json.load(f)
-            except json.JSONDecodeError:
-                pass  # Se houver erro, começa com um dicionário vazio
+                data = json.load(f)
+            except json.JSONDecodeError as e:
+                print(f"Erro no JSON na linha {e.lineno}, coluna {e.colno}: {e.msg}")
+                print("Conteúdo problemático:", f.read()[e.pos - 50:e.pos + 50])
+                return JsonResponse({"error": "Invalid JSON format"}, status=500)
 
-    # Atualiza apenas os valores recebidos, mantendo os outros
-    dados.update({
-        "timestamp": datetime.now().isoformat(),
-        "ritmo_cardiaco": heart_rate if heart_rate is not None else dados.get("ritmo_cardiaco"),
-        "decibeis_musica": decibeis if decibeis is not None else dados.get("decibeis_musica"),
-        "musica": musica if musica is not None else dados.get("musica"),
-        "genero": genero if genero is not None else dados.get("genero"),
-        "artista": artista if artista is not None else dados.get("artista"),
-    })
+        sort_order = request.GET.get('sort', 'desc')
+        stats = calcular_media_ritmo_por_artista(data)
+        sorted_stats = sorted(stats.items(),
+                              key=lambda x: x[1]['media_ritmo_cardiaco'],
+                              reverse=(sort_order == 'desc'))
 
-    # Guarda os dados no ficheiro
-    with open(JSON_FILE, "w") as f:
-        json.dump(dados, f, indent=4)
+        print(f"Artistas: {sorted_stats}")
+        return JsonResponse(dict(sorted_stats), safe=False)
 
-    print("✅ JSON atualizado:", dados)
-'''
+    except Exception as e:
+        print("Erro em artist_stats:", str(e))
+        return JsonResponse({"error": str(e)}, status=500)
+
+
+def genre_stats(request):
+    try:
+        min_count = int(request.GET.get('min_count', 40))
+        sort_order = request.GET.get('sort', 'desc')
+
+        with open(JSON_FILE, 'r') as f:
+            data = json.load(f)
+
+        stats = calcular_media_ritmo_por_genero(data)
+
+        # Filtra e converte para dicionário serializável
+        filtered_stats = {
+            k: {
+                **v,
+                "musicas": list(v["musicas"])  # Converte para lista
+            }
+            for k, v in stats.items()
+            if v["contagem"] > min_count
+        }
+
+        sorted_stats = sorted(filtered_stats.items(),
+                              key=lambda x: x[1]['media_ritmo_cardiaco'],
+                              reverse=(sort_order == 'desc'))
+
+        print(f"generos: {sorted_stats}")
+        return JsonResponse(dict(sorted_stats), safe=False)
+
+    except Exception as e:
+        print("Erro em genre_stats:", str(e))
+        return JsonResponse({"error": str(e)}, status=500)

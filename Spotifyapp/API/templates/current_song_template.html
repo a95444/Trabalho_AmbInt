@@ -12,6 +12,14 @@
 </head>
 <body class="bg-gray-900 text-white font-sans">
 
+<!-- Adicione isto dentro da tag <body>, preferencialmente no início -->
+<div class="fixed top-0 right-0 z-50 p-4">
+    <a href="/spotify/redirect"
+       class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300">
+        Sincronizar Novamente com o Relógio
+    </a>
+</div>
+
     <div id="song-info" class="text-center mt-20">
         <h3 id="song-title" class="text-3xl mb-4">{{ song.title }} - {{ song.artist }}</h3>
 
@@ -89,6 +97,33 @@
 <!-- Contêiner do gráfico com tamanho fixo -->
 <div class="w-full max-w-3xl mx-auto bg-gray-800 rounded-lg p-4 mt-6">
     <canvas id="heartVolumeChart" height="300"></canvas>
+</div>
+
+<!-- Novos gráficos de análise -->
+<div class="w-full max-w-6xl mx-auto mt-12 space-y-12">
+    <!-- Gráfico de Artistas -->
+    <div class="bg-gray-800 p-6 rounded-xl">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold">Ritmo Cardíaco por Artista</h3>
+            <select id="artist-sort" class="bg-gray-700 text-white px-4 py-2 rounded-lg">
+                <option value="desc">Maiores Médias</option>
+                <option value="asc">Menores Médias</option>
+            </select>
+        </div>
+        <canvas id="artistChart" height="400"></canvas>
+    </div>
+
+    <!-- Gráfico de Generos -->
+    <div class="bg-gray-800 p-6 rounded-xl">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold">Ritmo Cardíaco por Gênero</h3>
+            <select id="genre-sort" class="bg-gray-700 text-white px-4 py-2 rounded-lg">
+                <option value="desc">Maiores Médias</option>
+                <option value="asc">Menores Médias</option>
+            </select>
+        </div>
+        <canvas id="genreChart" height="400"></canvas>
+    </div>
 </div>
 
 
@@ -222,7 +257,6 @@
         });
 
         // Função para atualizar o gráfico
-        // Função para atualizar o gráfico
         function updateChart(heartRate, volume) {
             const now = new Date();
             const timeString = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
@@ -257,6 +291,156 @@
             heartVolumeChart.data.datasets[0].data = heartRateData;
             heartVolumeChart.data.datasets[1].data = volumeData;
             heartVolumeChart.update();
+        }
+
+
+
+        // Gráficos de análise
+        let artistChart, genreChart;
+
+        // Cores personalizadas
+        const chartColors = {
+            artist: '#ef4444',   // Vermelho
+            genre: '#3b82f6'     // Azul
+        };
+
+        // Configuração comum dos gráficos
+        const chartConfig = {
+            type: 'bar',
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => `${context.parsed.x} BPM (${context.dataset.counts[context.dataIndex]} plays)`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Ritmo Cardíaco Médio (BPM)'
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            autoSkip: false
+                        }
+                    }
+                }
+            }
+        };
+
+        // Função para processar dados
+        function processData(rawData, minCount) {
+            return Object.values(rawData)
+                .filter(item => item.contagem > minCount)
+                .map(item => ({
+                    label: item.artista || Object.keys(item)[0], // Ajuste para gêneros
+                    value: item.media_ritmo_cardiaco,
+                    count: item.contagem
+                }));
+        }
+
+        // Processamento específico para dados de artistas
+        function processArtistData(rawData, minCount) {
+            return Object.entries(rawData)  // Converte o objeto em array de [key, value]
+                .filter(([id, stats]) => stats.contagem > minCount)
+                .map(([id, stats]) => ({
+                    label: stats.artista,
+                    value: stats.media_ritmo_cardiaco,
+                    count: stats.contagem
+                }));
+        }
+
+        // Processamento específico para dados de gêneros
+        function processGenreData(rawData, minCount) {
+            return Object.entries(rawData)  // Converte o objeto em array de [gênero, stats]
+                .filter(([genre, stats]) => stats.contagem > minCount)
+                .map(([genre, stats]) => ({
+                    label: genre,
+                    value: stats.media_ritmo_cardiaco,
+                    count: stats.contagem
+                }));
+        }
+
+        // Função para atualizar gráficos
+        async function updateAnalysisCharts() {
+            try {
+                const [artistRes, genreRes] = await Promise.all([
+                    fetch(`/spotify/api/artist-stats/?min_count=40&sort=${document.getElementById('artist-sort').value}`),
+                    fetch(`/spotify/api/genre-stats/?min_count=40&sort=${document.getElementById('genre-sort').value}`)
+                ]);
+
+                const artistData = await artistRes.json();
+                const genreData = await genreRes.json();
+
+                console.log("Dados de Artistas:", artistData);  // Debug
+                console.log("Dados de Gêneros:", genreData);    // Debug
+
+                // Atualizar gráfico de artistas
+                updateChartData(artistChart, processArtistData(artistData, 40), chartColors.artist);
+
+                // Atualizar gráfico de gêneros
+                updateChartData(genreChart, processGenreData(genreData, 40), chartColors.genre);
+
+            } catch (error) {
+                console.error('Error updating analysis charts:', error);
+            }
+        }
+
+        function updateChartData(chart, data, color) {
+            const sortedData = data.sort((a, b) => b.value - a.value).slice(0, 10);
+
+            chart.data.labels = sortedData.map(d => d.label);
+            chart.data.datasets[0].data = sortedData.map(d => d.value);
+            chart.data.datasets[0].counts = sortedData.map(d => d.count);
+            chart.data.datasets[0].backgroundColor = color;
+            chart.update();
+        }
+
+        // Inicialização dos gráficos
+        function initializeAnalysisCharts() {
+            console.log("A INICIALIZAR GRÁFICOS")
+            // Gráfico de Artistas
+            artistChart = new Chart(document.getElementById('artistChart'), {
+                ...chartConfig,
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        counts: [],
+                        backgroundColor: chartColors.artist
+                    }]
+                }
+            });
+
+            // Gráfico de GEneros
+            genreChart = new Chart(document.getElementById('genreChart'), {
+                ...chartConfig,
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        counts: [],
+                        backgroundColor: chartColors.genre
+                    }]
+                }
+            });
+
+            // Event listeners
+            document.getElementById('artist-sort').addEventListener('change', updateAnalysisCharts);
+            document.getElementById('genre-sort').addEventListener('change', updateAnalysisCharts);
+
+            // Carregar dados iniciais
+            updateAnalysisCharts();
+            setInterval(updateAnalysisCharts, 30000);
         }
 
 
@@ -428,7 +612,7 @@
         });
 
 
-
+        initializeAnalysisCharts();
 
         }
 
@@ -477,6 +661,11 @@
 
         .chartjs-render-monitor {
             animation: none !important; /* Remove animação inicial */
+        }
+
+        #artistChart, #genreChart {
+            width: 100% !important;
+            height: 400px !important;
         }
     </style>
 

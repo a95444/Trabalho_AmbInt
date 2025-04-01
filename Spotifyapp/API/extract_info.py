@@ -6,7 +6,7 @@ def calcular_media_ritmo_por_artista(dados_json):
 
     for entrada in dados_json:
         artista = entrada["artista"]
-        print(artista)
+        #print(artista)
         artista_id= entrada["artista_id"]
         ritmo_cardiaco = entrada["ritmo_cardiaco"]
 
@@ -33,7 +33,7 @@ def calcular_media_ritmo_por_genero(dados_json):
     ritmo_cardiaco_por_genero = {}
 
     for entrada in dados_json:
-        generos = entrada["genero"]  # Lista de géneros
+        generos = entrada["genero"]
         ritmo_cardiaco = entrada["ritmo_cardiaco"]
         musica = entrada["musica"]
 
@@ -43,7 +43,7 @@ def calcular_media_ritmo_por_genero(dados_json):
                     "soma_ritmo_cardiaco": 0,
                     "contagem": 0,
                     "media_ritmo_cardiaco": 0.0,
-                    "musicas": set()
+                    "musicas": []  # Alterado para lista
                 }
 
             # Atualiza os valores
@@ -53,10 +53,10 @@ def calcular_media_ritmo_por_genero(dados_json):
                 ritmo_cardiaco_por_genero[genero]["soma_ritmo_cardiaco"] /
                 ritmo_cardiaco_por_genero[genero]["contagem"]
             )
-            ritmo_cardiaco_por_genero[genero]["musicas"].add(musica)
+            if musica not in ritmo_cardiaco_por_genero[genero]["musicas"]:
+                ritmo_cardiaco_por_genero[genero]["musicas"].append(musica)  # Adiciona à lista
 
     return ritmo_cardiaco_por_genero
-
 
 def calcular_media_ritmo_por_volume(dados_json):
     ritmo_cardiaco_por_volume = {}
@@ -86,7 +86,8 @@ def calcular_media_ritmo_por_volume(dados_json):
     return ritmo_cardiaco_por_volume
 
 
-JSON_FILE = "dados_ritmo.json"
+'''JSON_FILE = "../dados_ritmo.json"
 dados_json = json.load(open(JSON_FILE))
 
-print(calcular_media_ritmo_por_volume(dados_json))
+print(calcular_media_ritmo_por_artista(dados_json))
+print(calcular_media_ritmo_por_genero(dados_json))'''

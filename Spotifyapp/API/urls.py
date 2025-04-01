@@ -11,4 +11,6 @@ urlpatterns=[
     path("controls/", SpotifyControls.as_view(), name="spotify-controls"),
     #path("heart-rate/", HeartRateAPI.as_view(), name="heart-rate-api"),
     path("api/synced-data/", SyncedHeartRateMusic.as_view(), name="synced-data/"),
+    path('api/artist-stats/', artist_stats),
+    path('api/genre-stats/', genre_stats),
     ]
