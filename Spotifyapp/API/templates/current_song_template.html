@@ -381,29 +381,39 @@
                 const artistData = await artistRes.json();
                 const genreData = await genreRes.json();
 
-                console.log("Dados de Artistas:", artistData);  // Debug
-                console.log("Dados de Gêneros:", genreData);    // Debug
+                // Processar dados com ordenação
+                const processedArtistData = processArtistData(artistData, 40);
+                const processedGenreData = processGenreData(genreData, 40);
 
-                // Atualizar gráfico de artistas
-                updateChartData(artistChart, processArtistData(artistData, 40), chartColors.artist);
-
-                // Atualizar gráfico de gêneros
-                updateChartData(genreChart, processGenreData(genreData, 40), chartColors.genre);
+                updateChartData(artistChart, processedArtistData, chartColors.artist);
+                updateChartData(genreChart, processedGenreData, chartColors.genre);
 
             } catch (error) {
                 console.error('Error updating analysis charts:', error);
             }
         }
 
-        function updateChartData(chart, data, color) {
-            const sortedData = data.sort((a, b) => b.value - a.value).slice(0, 10);
+       function updateChartData(chart, data, color) {
+            const sortOrder = chart === artistChart
+                ? document.getElementById('artist-sort').value
+                : document.getElementById('genre-sort').value;
+
+            const sortedData = data.sort((a, b) =>
+                sortOrder === 'desc' ? b.value - a.value : a.value - b.value
+            ).slice(0, 10);
 
             chart.data.labels = sortedData.map(d => d.label);
             chart.data.datasets[0].data = sortedData.map(d => d.value);
             chart.data.datasets[0].counts = sortedData.map(d => d.count);
             chart.data.datasets[0].backgroundColor = color;
+
+            if (sortOrder === 'asc') {
+                chart.options.scales.x.title.text = 'Ritmo Cardíaco Médio (BPM) - Menores';
+            } else {
+                chart.options.scales.x.title.text = 'Ritmo Cardíaco Médio (BPM) - Maiores';
+            }
             chart.update();
-        }
+                    }
 
         // Inicialização dos gráficos
         function initializeAnalysisCharts() {
