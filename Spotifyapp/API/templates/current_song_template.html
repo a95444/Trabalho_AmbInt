@@ -459,7 +459,7 @@
         async function playCalmingSong() {
             try {
                 const response = await $.ajax({
-                    url: "/spotify/api/play-calming-song/",
+                    url: "/spotify/api/play_calm_song/",
                     type: "POST",
                     contentType: "application/json",
                     headers: {
@@ -470,31 +470,29 @@
                     })
                 });
 
-                if (response.track_uri) {
+                if (response.track_uris) {
                     // 1. Adicionar à queue
-                    await $.ajax({
-                        url: "/spotify/controls/",
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val()
-                        },
-                        data: JSON.stringify({
-                            key: userKey,
-                            action: "add_to_queue",
-                            uri: response.track_uri
+                    await Promise.all(response.track_uris.map(uri =>
+                        $.ajax({
+                            url: "/spotify/controls/",
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val()
+                            },
+                            data: JSON.stringify({
+                                key: userKey,
+                                action: "add_to_queue",
+                                uri: uri
+                            })
                         })
+                    ));
 
-                    });
-
-                    // 2. Pular para a próxima música (a recém-adicionada)
+                    // 2. Pular para a primeira música nova
                     await $.ajax({
                         url: "/spotify/controls/",
                         method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val()
-                        },
+                        headers: { /* ... */ },
                         data: JSON.stringify({
                             key: userKey,
                             action: "skip"

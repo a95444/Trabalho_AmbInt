@@ -4,7 +4,7 @@ from django.utils import  timezone
 from datetime import timedelta
 from requests import *
 from.credentials import *
-
+import json
 
 BASE_URL='https://api.spotify.com/v1/me/'
 BASE_URL_ARTISTS='https://api.spotify.com/v1/'
@@ -97,8 +97,13 @@ def spotify_requests_execution(session_id, endpoint, params=None, method="get"):
             response = post(BASE_URL + endpoint, headers=headers)
         elif endpoint in "player/queue":
             print("REQUEST QUEUE")
-            response = post(BASE_URL + endpoint, headers=headers, params=params)
-            print(f"response: {response}")
+            try:
+                response = post(BASE_URL + endpoint, headers=headers, params=params)
+                if response.status_code == 204:  # Resposta bem-sucedida sem conteúdo
+                    return {'status': 'success'}
+                return response.json()
+            except json.JSONDecodeError:
+                return {'status': 'success'}  # Resposta vazia é normal para esta operação
         else:
             response = get(BASE_URL + endpoint, headers=headers)
 
