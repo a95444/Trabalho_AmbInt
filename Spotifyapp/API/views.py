@@ -370,7 +370,7 @@ def artist_stats(request):
                               key=lambda x: x[1]['media_ritmo_cardiaco'],
                               reverse=(sort_order == 'desc'))
 
-        print(f"Artistas: {sorted_stats}")
+        #print(f"Artistas: {sorted_stats}")
         return JsonResponse(dict(sorted_stats), safe=False)
 
     except Exception as e:
@@ -402,9 +402,70 @@ def genre_stats(request):
                               key=lambda x: x[1]['media_ritmo_cardiaco'],
                               reverse=(sort_order == 'desc'))
 
-        print(f"generos: {sorted_stats}")
+        #print(f"generos: {sorted_stats}")
         return JsonResponse(dict(sorted_stats), safe=False)
 
     except Exception as e:
         print("Erro em genre_stats:", str(e))
         return JsonResponse({"error": str(e)}, status=500)
+
+
+# views.py
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
+
+@require_POST
+def play_calm_song(request):
+    try:
+        data = json.loads(request.body)
+        user_key = data.get('key')
+
+        with open(JSON_FILE, 'r') as f:
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError as e:
+                print(f"Erro no JSON na linha {e.lineno}, coluna {e.colno}: {e.msg}")
+                print("Conteúdo problemático:", f.read()[e.pos - 50:e.pos + 50])
+                return JsonResponse({"error": "Invalid JSON format"}, status=500)
+
+            #Calcula as estatísticas
+            stats = calcular_media_ritmo_por_artista(data)
+
+
+            # Ordena por ritmo cardíaco médio (decrescente por padrão)
+            sort_order = 'desc'
+
+            # Filtra e ordena os itens
+            sorted_stats = sorted(
+                [(k, v) for k, v in stats.items() if 'media_ritmo_cardiaco' in v],
+                key=lambda x: x[1]['media_ritmo_cardiaco'],
+                reverse=(sort_order == 'desc')
+            )
+
+            # Converte para um formato mais limpo
+            result = {
+                artist: {
+                    'nome': data['artista'],
+                    'media_ritmo': data['media_ritmo_cardiaco'],
+                    'contagem': data['contagem']
+                }
+                for artist, data in sorted_stats
+            }
+
+            print(result)
+
+            print("Estatísticas ordenadas:")
+            for artist, data in sorted_stats[::-1]:  # Mostra apenas os 5 primeiros para debug
+                print(f"{artist}: Nome {data['artista']} {data['media_ritmo_cardiaco']} BPM (plays: {data['contagem']})")
+
+            return JsonResponse({
+                'status': 'success',
+                'artists': result
+            })
+
+    except Exception as e:
+        print(f"Erro no processamento: {str(e)}")
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=400)

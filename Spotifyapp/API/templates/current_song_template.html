@@ -11,6 +11,7 @@
 
 </head>
 <body class="bg-gray-900 text-white font-sans">
+{% csrf_token %}
 
 <!-- Adicione isto dentro da tag <body>, preferencialmente no início -->
 <div class="fixed top-0 right-0 z-50 p-4">
@@ -126,7 +127,17 @@
     </div>
 </div>
 
-
+<!--Modal para notificação de música-->
+<div id="calm-song-modal" class="modal">
+    <div class="modal-content">
+        <h3>❤️ Ritmo cardíaco elevado!</h3>
+        <p>Detetámos que o seu ritmo cardíaco está acima do normal. Deseja ouvir uma música mais calma?</p>
+        <div class="modal-buttons">
+            <button id="confirm-calming">Sim, por favor</button>
+            <button id="cancel-calming">Não, obrigado</button>
+        </div>
+    </div>
+</div>
 
 </body>
     <script>
@@ -337,17 +348,6 @@
             }
         };
 
-        // Função para processar dados
-        function processData(rawData, minCount) {
-            return Object.values(rawData)
-                .filter(item => item.contagem > minCount)
-                .map(item => ({
-                    label: item.artista || Object.keys(item)[0], // Ajuste para gêneros
-                    value: item.media_ritmo_cardiaco,
-                    count: item.contagem
-                }));
-        }
-
         // Processamento específico para dados de artistas
         function processArtistData(rawData, minCount) {
             return Object.entries(rawData)  // Converte o objeto em array de [key, value]
@@ -454,7 +454,33 @@
         }
 
 
+        function playCalmingSong() {
+            const csrftoken = $("[name=csrfmiddlewaretoken]").val();
+            const userKey = "{{ user_key }}";
+
+            $.ajax({
+                url: "/spotify/api/play-calming-song/",
+                type: "POST",
+                contentType: "application/json", // Indica que enviamos JSON
+                headers: {
+                    "X-CSRFToken": csrftoken
+                },
+                data: JSON.stringify({ // Converte para JSON string
+                    key: userKey
+                }),
+                success: function(response) {
+                    console.log("Calm Music Playing:", response);
+                },
+                error: function(xhr) {
+                    console.error("Error:", xhr.responseJSON?.message || xhr.statusText);
+                }
+            });
+        }
+
+
         // Função para atualizar a UI com os dados sincronizados
+        let notification_on= 1;
+        let notificationTimeout;
         function fetchSyncedData() {
             fetch(`/spotify/api/synced-data/?session_key=${userKey}`, {
                 method: "GET",
@@ -491,13 +517,44 @@
                     if (data.ritmo_cardiaco) {
                         heartRateValueElement.text(`${data.ritmo_cardiaco} BPM`);
                         // Ajusta a velocidade da animação do coração (pulse) com base no BPM
+                        if(data.ritmo_cardiaco>70&&notification_on===1){
+                            console.log("AAAAAAAAAAAAAAAAAAAAAAA");
+                            notification_on=0;
+
+                            // Mostrar o modal
+                            const modal = document.getElementById('calm-song-modal');
+                            modal.style.display = 'block';
+
+                            // Configurar os botões
+                            document.getElementById('confirm-calming').onclick = () => {
+                                //clearTimeout(notificationTimeout);
+                                modal.style.display = 'none';
+                                // Chamar função para tocar música calma
+                                playCalmingSong();
+                            };
+
+                            document.getElementById('cancel-calming').onclick = () => {
+                                //clearTimeout(notificationTimeout);
+                                modal.style.display = 'none';
+
+                            };
+
+
+                            //if (notificationTimeout) clearTimeout(notificationTimeout);
+
+                            notificationTimeout = setTimeout(() => {
+                                notification_on = 1;
+                                console.log("Notificações reativadas");
+                            }, 60000);
+
+                        }
                         const pulseSpeed = Math.max(500, 2000 - (data.ritmo_cardiaco * 10));
                         $("#heart-icon").css("animation-duration", `${pulseSpeed}ms`);
                     }
 
                     // Atualiza a correlação de volume/decibéis, se esses dados estiverem presentes
                     if (data.volume) {
-                        volumeCorrelationElement.text(`Volume: ${data.volume || "--"}% | Decibéis: ${data.decibeis_musica} dB`);
+                        volumeCorrelationElement.text(`Volume: ${data.volume || "--"}% `);
                     }
 
                     if (data.ritmo_cardiaco && data.volume) {
@@ -630,6 +687,55 @@
     </script>
 
     <style>
+
+                .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1a1a1a;
+            padding: 25px;
+            border-radius: 12px;
+            max-width: 400px;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .modal-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+
+        .modal-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #confirm-calming {
+            background-color: #1DB954; /* Verde Spotify */
+            color: white;
+        }
+
+        #cancel-calming {
+            background-color: #535353;
+            color: white;
+        }
         /* Tailwind Custom continuous animation for fast spinning */
         @keyframes spin-fast {
             0% {
