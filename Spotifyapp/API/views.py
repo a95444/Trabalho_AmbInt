@@ -13,11 +13,15 @@ from .models import *
 from django.shortcuts import render
 
 
+def get_access_token(request):
+    session_key = request.session.session_key
+    token = Token.objects.get(user=session_key)
+    return JsonResponse({'access_token': token.access_token})
 
 
 class AuthenticationURL(APIView):
     def get(self, request, format=None):
-        scopes="user-read-currently-playing user-read-playback-state user-modify-playback-state user-read-private user-read-email"
+        scopes="user-read-currently-playing user-read-playback-state user-modify-playback-state user-read-private user-read-email streaming"
         url= Request('GET', 'https://accounts.spotify.com/authorize',
                      params= {
                          'scope': scopes,
@@ -192,7 +196,8 @@ class SpotifyControls(APIView):
             "stop": "player/pause",
             "seek": "player/seek",
             "skip": "player/next",
-            "previous": "player/previous"
+            "previous": "player/previous",
+            "add_to_queue": "player/queue"
         }
 
         # Validate the action
@@ -207,6 +212,18 @@ class SpotifyControls(APIView):
             endpoint = action_endpoints[action]
             response = spotify_seek(key, int(position_ms))
             print(f"RESPOSTA SEEK {response}") 
+        elif action == "add_to_queue":
+            print()
+            uri = request.data.get("uri")
+            if not uri:
+                return Response_status({"error": "URI da música necessária"}, status=400)
+
+            endpoint = "player/queue"
+            params = {"uri": uri}
+            response = spotify_requests_execution(key, endpoint, params=params, method="post")
+            print(f"RESPOSTA QUEUE {response}")
+
+            return Response_status({"message": "Música adicionada à fila"}, status=200)
         else:
             # General execution for other actions
             endpoint = action_endpoints[action]
@@ -217,6 +234,7 @@ class SpotifyControls(APIView):
             return Response_status({"error": response["error"]}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response_status({"message": f"Action {action} executed successfully"}, status=status.HTTP_200_OK)
+
 
 
 # views.py
@@ -413,6 +431,7 @@ def genre_stats(request):
 # views.py
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
+import random
 
 @require_POST
 def play_calm_song(request):
@@ -437,31 +456,53 @@ def play_calm_song(request):
 
             # Filtra e ordena os itens
             sorted_stats = sorted(
-                [(k, v) for k, v in stats.items() if 'media_ritmo_cardiaco' in v],
+                [(k, v) for k, v in stats.items()
+                 if v.get('contagem', 0) > 50],  # Filtra por contagem > 50
                 key=lambda x: x[1]['media_ritmo_cardiaco'],
                 reverse=(sort_order == 'desc')
             )
 
-            # Converte para um formato mais limpo
-            result = {
-                artist: {
-                    'nome': data['artista'],
-                    'media_ritmo': data['media_ritmo_cardiaco'],
-                    'contagem': data['contagem']
-                }
-                for artist, data in sorted_stats
-            }
+            # Pega os 5 artistas mais calmos
+            tracks={}
+            top_calm_artists = sorted_stats[-5:]
+            for artist in top_calm_artists:
+                #print(type(artist))
+                print(artist[1]['artista']) #dá print dos 5 artistas com menor ritmo cardiaco medio
+                artist_id = artist[0]
+                tracks_temp = spotify_requests_artists(user_key, f"artists/{artist_id}/top-tracks?country=PT")
+                if tracks:
+                    tracks[tracks].append(tracks_temp)
+                else:
+                    tracks=tracks_temp
 
-            print(result)
+            print(f"TRACKS: {len(tracks)}")
+            #print(f"Top Calm {top_calm_artists}")
 
-            print("Estatísticas ordenadas:")
-            for artist, data in sorted_stats[::-1]:  # Mostra apenas os 5 primeiros para debug
-                print(f"{artist}: Nome {data['artista']} {data['media_ritmo_cardiaco']} BPM (plays: {data['contagem']})")
+            if not top_calm_artists:
+                return JsonResponse({'error': 'Nenhum artista calmo encontrado'}, status=404)
+
+            # Seleciona um artista aleatório dos 5 mais calmos
+            '''selected_artist = random.choice(top_calm_artists)
+            artist_id = selected_artist[0]
+            artist_name = selected_artist[1]['artista']
+
+            # Obtém as top tracks do artista
+            tracks = spotify_requests_artists(user_key, f"artists/{artist_id}/top-tracks?country=PT")
+            #print(f"tracks {tracks[tracks][]}")'''
+
+            if not tracks or 'tracks' not in tracks or len(tracks['tracks']) == 0:
+                return JsonResponse({'error': 'Nenhuma música encontrada para o artista'}, status=404)
+
+            num_tracks = 10  # Quantidade de músicas para adicionar
+            selected_tracks = random.sample(tracks['tracks'], min(num_tracks, len(tracks['tracks'])))
 
             return JsonResponse({
                 'status': 'success',
-                'artists': result
+                'track_uris': [track['uri'] for track in selected_tracks],
+                'artist': artist_name,
+                'tracks': [track['name'] for track in selected_tracks]
             })
+
 
     except Exception as e:
         print(f"Erro no processamento: {str(e)}")

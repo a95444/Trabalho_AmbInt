@@ -76,7 +76,7 @@ def refresh_token_function(session_id):
     )
 
 
-def spotify_requests_execution(session_id, endpoint):
+def spotify_requests_execution(session_id, endpoint, params=None, method="get"):
     token = check_token(session_id)
 
     if not token:
@@ -95,6 +95,10 @@ def spotify_requests_execution(session_id, endpoint):
         elif endpoint in ["player/next", "player/previous"]:
             print("REQUESTE DOS BOTÕES CHEGOU")
             response = post(BASE_URL + endpoint, headers=headers)
+        elif endpoint in "player/queue":
+            print("REQUEST QUEUE")
+            response = post(BASE_URL + endpoint, headers=headers, params=params)
+            print(f"response: {response}")
         else:
             response = get(BASE_URL + endpoint, headers=headers)
 

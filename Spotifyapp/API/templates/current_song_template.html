@@ -9,17 +9,18 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
 
+
 </head>
 <body class="bg-gray-900 text-white font-sans">
 {% csrf_token %}
 
 <!-- Adicione isto dentro da tag <body>, preferencialmente no início -->
-<div class="fixed top-0 right-0 z-50 p-4">
-    <a href="/spotify/redirect"
-       class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300">
-        Sincronizar Novamente com o Relógio
-    </a>
-</div>
+    <div class="fixed top-0 right-0 z-50 p-4">
+        <a href="/spotify/redirect"
+           class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300">
+            Sincronizar Novamente com o Relógio
+        </a>
+    </div>
 
     <div id="song-info" class="text-center mt-20">
         <h3 id="song-title" class="text-3xl mb-4">{{ song.title }} - {{ song.artist }}</h3>
@@ -141,6 +142,7 @@
 
 </body>
     <script>
+
         $(document).ready(function() {
 
         // Elementos da página
@@ -162,7 +164,6 @@
             const seconds = Math.floor((ms % 60000) / 1000).toString().padStart(2, '0');
             return `${minutes}:${seconds}`;
         }
-
 
         // Adicionar um canvas para o gráfico no HTML
         // Configuração inicial do gráfico
@@ -454,27 +455,64 @@
         }
 
 
-        function playCalmingSong() {
-            const csrftoken = $("[name=csrfmiddlewaretoken]").val();
-            const userKey = "{{ user_key }}";
+        // Modifique a função playCalmingSong
+        async function playCalmingSong() {
+            try {
+                const response = await $.ajax({
+                    url: "/spotify/api/play-calming-song/",
+                    type: "POST",
+                    contentType: "application/json",
+                    headers: {
+                        "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val()
+                    },
+                    data: JSON.stringify({
+                        key: "{{ user_key }}"
+                    })
+                });
 
-            $.ajax({
-                url: "/spotify/api/play-calming-song/",
-                type: "POST",
-                contentType: "application/json", // Indica que enviamos JSON
-                headers: {
-                    "X-CSRFToken": csrftoken
-                },
-                data: JSON.stringify({ // Converte para JSON string
-                    key: userKey
-                }),
-                success: function(response) {
-                    console.log("Calm Music Playing:", response);
-                },
-                error: function(xhr) {
-                    console.error("Error:", xhr.responseJSON?.message || xhr.statusText);
+                if (response.track_uri) {
+                    // 1. Adicionar à queue
+                    await $.ajax({
+                        url: "/spotify/controls/",
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val()
+                        },
+                        data: JSON.stringify({
+                            key: userKey,
+                            action: "add_to_queue",
+                            uri: response.track_uri
+                        })
+
+                    });
+
+                    // 2. Pular para a próxima música (a recém-adicionada)
+                    await $.ajax({
+                        url: "/spotify/controls/",
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val()
+                        },
+                        data: JSON.stringify({
+                            key: userKey,
+                            action: "skip"
+                        })
+                    });
+
+                    // 3. Forçar atualização
+                    fetchSyncedData();
                 }
-            });
+
+
+
+            } catch (error) {
+                console.error("Erro:", error);
+                if(error.status === 404) {
+                    alert('Por favor, inicie a reprodução em algum dispositivo Spotify primeiro.');
+                }
+            }
         }
 
 
@@ -493,7 +531,12 @@
                     return response.json();
                 })
                 .then(data => {
-                    // Atualiza informações da música e ritmo cardíaco
+
+                    if(data.is_playing) {
+                        const progress = data.progress_ms + (Date.now() - data.timestamp);
+                        progressBar.value = progress;
+                        currentTimeLabel.textContent = formatTime(progress);
+                    }
 
                     // Atualiza o título da música e artista se mudou
                     if (data.musica && songTitleElement) {
