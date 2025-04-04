@@ -59361,1643 +59361,936 @@
         "volume": 9
     },
     {
-        "timestamp": "2025-04-04T00:00:54.661237",
-        "ritmo_cardiaco": 67,
+        "timestamp": "2025-04-04T01:08:14.433346",
+        "ritmo_cardiaco": 69,
         "decibeis_musica": 0,
-        "musica": "Hell",
-        "musica_id": "553t4b155io1zITLPgVZD8",
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
         "genero": [
-            "midwest emo",
-            "pop punk",
-            "emo pop",
-            "emo"
+            "classic rock"
         ],
-        "artista": "Have Mercy",
-        "artista_id": "2UvzehEVGcYTPKNwJSZ2kM",
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
         "volume": 87
     },
     {
-        "timestamp": "2025-04-04T00:00:56.661212",
+        "timestamp": "2025-04-04T01:08:16.481921",
+        "ritmo_cardiaco": 70,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:08:18.427401",
+        "ritmo_cardiaco": 71,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:08:21.339464",
+        "ritmo_cardiaco": 71,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:08:22.596027",
+        "ritmo_cardiaco": 69,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:08:24.391436",
         "ritmo_cardiaco": 68,
         "decibeis_musica": 0,
-        "musica": "Hell",
-        "musica_id": "553t4b155io1zITLPgVZD8",
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
         "genero": [
-            "midwest emo",
-            "pop punk",
-            "emo pop",
-            "emo"
+            "classic rock"
         ],
-        "artista": "Have Mercy",
-        "artista_id": "2UvzehEVGcYTPKNwJSZ2kM",
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
         "volume": 87
     },
     {
-        "timestamp": "2025-04-04T00:00:58.608511",
-        "ritmo_cardiaco": 69,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:00.691355",
-        "ritmo_cardiaco": 68,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:02.635175",
+        "timestamp": "2025-04-04T01:08:26.472486",
         "ritmo_cardiaco": 67,
         "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
         "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
+            "classic rock"
         ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
         "volume": 87
     },
     {
-        "timestamp": "2025-04-04T00:01:04.613972",
-        "ritmo_cardiaco": 67,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:06.713841",
-        "ritmo_cardiaco": 65,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:08.637671",
-        "ritmo_cardiaco": 65,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:10.673707",
-        "ritmo_cardiaco": 65,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:12.678514",
-        "ritmo_cardiaco": 65,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:14.683010",
-        "ritmo_cardiaco": 65,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:16.679264",
+        "timestamp": "2025-04-04T01:08:28.513028",
         "ritmo_cardiaco": 66,
         "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
         "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
+            "classic rock"
         ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
         "volume": 87
     },
     {
-        "timestamp": "2025-04-04T00:01:18.708521",
-        "ritmo_cardiaco": 66,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:20.605399",
-        "ritmo_cardiaco": 67,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:22.782259",
-        "ritmo_cardiaco": 67,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:24.638477",
+        "timestamp": "2025-04-04T01:08:30.401957",
         "ritmo_cardiaco": 65,
         "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
         "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
+            "classic rock"
         ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
         "volume": 87
     },
     {
-        "timestamp": "2025-04-04T00:01:26.651255",
+        "timestamp": "2025-04-04T01:08:32.477438",
+        "ritmo_cardiaco": 65,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:08:34.527953",
+        "ritmo_cardiaco": 65,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:08:36.392721",
+        "ritmo_cardiaco": 65,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:08:38.368475",
         "ritmo_cardiaco": 64,
         "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
         "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
+            "classic rock"
         ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
         "volume": 87
     },
     {
-        "timestamp": "2025-04-04T00:01:28.702293",
-        "ritmo_cardiaco": 64,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:30.662765",
-        "ritmo_cardiaco": 65,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:32.680219",
-        "ritmo_cardiaco": 66,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:34.646635",
-        "ritmo_cardiaco": 67,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:36.635745",
-        "ritmo_cardiaco": 67,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:38.635521",
-        "ritmo_cardiaco": 66,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:40.691025",
-        "ritmo_cardiaco": 67,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:42.664261",
-        "ritmo_cardiaco": 70,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:44.712177",
-        "ritmo_cardiaco": 72,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:46.714006",
-        "ritmo_cardiaco": 78,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:49.998910",
-        "ritmo_cardiaco": 89,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:50.707648",
-        "ritmo_cardiaco": 89,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:52.768800",
-        "ritmo_cardiaco": 95,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:54.618002",
-        "ritmo_cardiaco": 98,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:56.668695",
-        "ritmo_cardiaco": 99,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:01:58.644802",
-        "ritmo_cardiaco": 101,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:00.627260",
-        "ritmo_cardiaco": 102,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:03.249654",
-        "ritmo_cardiaco": 102,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:04.667392",
-        "ritmo_cardiaco": 98,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:06.634059",
-        "ritmo_cardiaco": 98,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:08.645541",
-        "ritmo_cardiaco": 96,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:10.732418",
-        "ritmo_cardiaco": 92,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:12.648089",
-        "ritmo_cardiaco": 89,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:14.896831",
-        "ritmo_cardiaco": 87,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:16.702372",
-        "ritmo_cardiaco": 84,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:18.625226",
-        "ritmo_cardiaco": 82,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:20.624985",
-        "ritmo_cardiaco": 81,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:22.816986",
-        "ritmo_cardiaco": 80,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:24.668385",
-        "ritmo_cardiaco": 79,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:27.004644",
-        "ritmo_cardiaco": 79,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:28.701950",
-        "ritmo_cardiaco": 79,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:30.638436",
-        "ritmo_cardiaco": 80,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:32.622524",
-        "ritmo_cardiaco": 80,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:34.624827",
-        "ritmo_cardiaco": 81,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:36.649389",
-        "ritmo_cardiaco": 81,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:38.628424",
-        "ritmo_cardiaco": 80,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:40.647041",
-        "ritmo_cardiaco": 79,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:42.674116",
-        "ritmo_cardiaco": 78,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:44.655466",
-        "ritmo_cardiaco": 77,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:46.623710",
-        "ritmo_cardiaco": 76,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:48.629088",
-        "ritmo_cardiaco": 75,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:50.633554",
-        "ritmo_cardiaco": 74,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:52.639162",
-        "ritmo_cardiaco": 73,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:54.979832",
-        "ritmo_cardiaco": 72,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:56.627734",
-        "ritmo_cardiaco": 73,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:02:59.825004",
-        "ritmo_cardiaco": 73,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:00.715990",
-        "ritmo_cardiaco": 74,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:02.671894",
-        "ritmo_cardiaco": 74,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:04.678254",
-        "ritmo_cardiaco": 74,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:06.652371",
-        "ritmo_cardiaco": 73,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:08.623746",
-        "ritmo_cardiaco": 72,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:10.624604",
-        "ritmo_cardiaco": 70,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:12.838859",
-        "ritmo_cardiaco": 69,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:14.659113",
-        "ritmo_cardiaco": 69,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:16.671948",
-        "ritmo_cardiaco": 69,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:18.638808",
-        "ritmo_cardiaco": 69,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:20.625334",
-        "ritmo_cardiaco": 69,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:22.735446",
-        "ritmo_cardiaco": 69,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:24.710423",
-        "ritmo_cardiaco": 69,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:26.634891",
-        "ritmo_cardiaco": 69,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:28.666195",
-        "ritmo_cardiaco": 70,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:30.647775",
-        "ritmo_cardiaco": 71,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:32.660131",
-        "ritmo_cardiaco": 71,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:35.186210",
-        "ritmo_cardiaco": 72,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:37.306482",
-        "ritmo_cardiaco": 72,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:39.226579",
-        "ritmo_cardiaco": 72,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:41.215298",
-        "ritmo_cardiaco": 73,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:43.249789",
-        "ritmo_cardiaco": 74,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:45.212632",
-        "ritmo_cardiaco": 73,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:47.244819",
-        "ritmo_cardiaco": 72,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:49.195797",
-        "ritmo_cardiaco": 74,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:51.179815",
-        "ritmo_cardiaco": 74,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:53.625128",
-        "ritmo_cardiaco": 74,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:55.234172",
-        "ritmo_cardiaco": 74,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:57.174106",
-        "ritmo_cardiaco": 73,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:03:59.196151",
-        "ritmo_cardiaco": 71,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:04:01.186167",
-        "ritmo_cardiaco": 70,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:04:03.208462",
-        "ritmo_cardiaco": 69,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:04:05.183307",
-        "ritmo_cardiaco": 69,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:04:07.398644",
-        "ritmo_cardiaco": 69,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:04:09.222104",
-        "ritmo_cardiaco": 69,
-        "decibeis_musica": 0,
-        "musica": "Fugidinha - Ao Vivo",
-        "musica_id": "0pBC8QL5PSSyDJVIrKNFuq",
-        "genero": [
-            "sertanejo",
-            "sertanejo universit\u00e1rio",
-            "sertanejo tradicional"
-        ],
-        "artista": "Michel Tel\u00f3",
-        "artista_id": "1sDVuztNhGcetCLChkleDA",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:04:11.467210",
-        "ritmo_cardiaco": 69,
-        "decibeis_musica": 0,
-        "musica": "The Chain - 2004 Remaster",
-        "musica_id": "5e9TFTbltYBg2xThimr0rU",
-        "genero": [
-            "classic rock",
-            "soft rock"
-        ],
-        "artista": "Fleetwood Mac",
-        "artista_id": "08GQAI4eElDnROBrJRGE0X",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:04:13.872178",
-        "ritmo_cardiaco": 67,
-        "decibeis_musica": 0,
-        "musica": "The Chain - 2004 Remaster",
-        "musica_id": "5e9TFTbltYBg2xThimr0rU",
-        "genero": [
-            "classic rock",
-            "soft rock"
-        ],
-        "artista": "Fleetwood Mac",
-        "artista_id": "08GQAI4eElDnROBrJRGE0X",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:04:17.996122",
-        "ritmo_cardiaco": 65,
-        "decibeis_musica": 0,
-        "musica": "The Chain - 2004 Remaster",
-        "musica_id": "5e9TFTbltYBg2xThimr0rU",
-        "genero": [
-            "classic rock",
-            "soft rock"
-        ],
-        "artista": "Fleetwood Mac",
-        "artista_id": "08GQAI4eElDnROBrJRGE0X",
-        "volume": 87
-    },
-    {
-        "timestamp": "2025-04-04T00:04:22.147769",
+        "timestamp": "2025-04-04T01:08:40.871680",
         "ritmo_cardiaco": 63,
         "decibeis_musica": 0,
-        "musica": "The Chain - 2004 Remaster",
-        "musica_id": "5e9TFTbltYBg2xThimr0rU",
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
         "genero": [
-            "classic rock",
-            "soft rock"
+            "classic rock"
         ],
-        "artista": "Fleetwood Mac",
-        "artista_id": "08GQAI4eElDnROBrJRGE0X",
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
         "volume": 87
     },
     {
-        "timestamp": "2025-04-04T00:04:23.824219",
+        "timestamp": "2025-04-04T01:08:43.906577",
+        "ritmo_cardiaco": 63,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:08:44.607965",
+        "ritmo_cardiaco": 63,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:08:46.411220",
         "ritmo_cardiaco": 64,
         "decibeis_musica": 0,
-        "musica": "The Chain - 2004 Remaster",
-        "musica_id": "5e9TFTbltYBg2xThimr0rU",
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
         "genero": [
-            "classic rock",
-            "soft rock"
+            "classic rock"
         ],
-        "artista": "Fleetwood Mac",
-        "artista_id": "08GQAI4eElDnROBrJRGE0X",
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
         "volume": 87
     },
     {
-        "timestamp": "2025-04-04T00:04:24.621879",
+        "timestamp": "2025-04-04T01:08:48.496058",
+        "ritmo_cardiaco": 64,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:08:50.433419",
         "ritmo_cardiaco": 65,
         "decibeis_musica": 0,
-        "musica": "The Chain - 2004 Remaster",
-        "musica_id": "5e9TFTbltYBg2xThimr0rU",
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
         "genero": [
-            "classic rock",
-            "soft rock"
+            "classic rock"
         ],
-        "artista": "Fleetwood Mac",
-        "artista_id": "08GQAI4eElDnROBrJRGE0X",
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
         "volume": 87
     },
     {
-        "timestamp": "2025-04-04T00:04:25.991302",
+        "timestamp": "2025-04-04T01:08:52.523362",
+        "ritmo_cardiaco": 65,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:08:54.503900",
+        "ritmo_cardiaco": 65,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:08:56.433254",
+        "ritmo_cardiaco": 62,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:08:58.492912",
+        "ritmo_cardiaco": 58,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:00.372636",
+        "ritmo_cardiaco": 59,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:02.393494",
+        "ritmo_cardiaco": 60,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:04.414383",
+        "ritmo_cardiaco": 60,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:06.540541",
+        "ritmo_cardiaco": 61,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:08.443938",
+        "ritmo_cardiaco": 59,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:10.539164",
+        "ritmo_cardiaco": 59,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:12.569374",
+        "ritmo_cardiaco": 58,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:14.496727",
+        "ritmo_cardiaco": 57,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:16.560497",
+        "ritmo_cardiaco": 56,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:18.426748",
+        "ritmo_cardiaco": 56,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:20.513800",
+        "ritmo_cardiaco": 55,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:22.541464",
+        "ritmo_cardiaco": 55,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:24.449471",
+        "ritmo_cardiaco": 58,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:26.414677",
+        "ritmo_cardiaco": 57,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:28.455634",
+        "ritmo_cardiaco": 60,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:30.486566",
+        "ritmo_cardiaco": 59,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:32.396939",
+        "ritmo_cardiaco": 60,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:34.443858",
+        "ritmo_cardiaco": 61,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:36.485170",
+        "ritmo_cardiaco": 64,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:38.362826",
+        "ritmo_cardiaco": 65,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:40.508371",
+        "ritmo_cardiaco": 65,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:42.398303",
         "ritmo_cardiaco": 66,
         "decibeis_musica": 0,
-        "musica": "The Chain - 2004 Remaster",
-        "musica_id": "5e9TFTbltYBg2xThimr0rU",
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
         "genero": [
-            "classic rock",
-            "soft rock"
+            "classic rock"
         ],
-        "artista": "Fleetwood Mac",
-        "artista_id": "08GQAI4eElDnROBrJRGE0X",
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
         "volume": 87
     },
     {
-        "timestamp": "2025-04-04T00:04:27.381389",
+        "timestamp": "2025-04-04T01:09:44.428136",
+        "ritmo_cardiaco": 67,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:46.459148",
+        "ritmo_cardiaco": 68,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:48.535055",
+        "ritmo_cardiaco": 67,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:50.414308",
+        "ritmo_cardiaco": 67,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:52.429421",
+        "ritmo_cardiaco": 68,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:09:54.398965",
         "ritmo_cardiaco": 69,
         "decibeis_musica": 0,
-        "musica": "The Chain - 2004 Remaster",
-        "musica_id": "5e9TFTbltYBg2xThimr0rU",
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
         "genero": [
-            "classic rock",
-            "soft rock"
+            "classic rock"
         ],
-        "artista": "Fleetwood Mac",
-        "artista_id": "08GQAI4eElDnROBrJRGE0X",
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
         "volume": 87
     },
     {
-        "timestamp": "2025-04-04T00:04:29.293809",
+        "timestamp": "2025-04-04T01:09:56.430023",
         "ritmo_cardiaco": 69,
         "decibeis_musica": 0,
-        "musica": "The Chain - 2004 Remaster",
-        "musica_id": "5e9TFTbltYBg2xThimr0rU",
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
         "genero": [
-            "classic rock",
-            "soft rock"
+            "classic rock"
         ],
-        "artista": "Fleetwood Mac",
-        "artista_id": "08GQAI4eElDnROBrJRGE0X",
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
         "volume": 87
     },
     {
-        "timestamp": "2025-04-04T00:04:31.258957",
-        "ritmo_cardiaco": 70,
+        "timestamp": "2025-04-04T01:09:58.454037",
+        "ritmo_cardiaco": 69,
         "decibeis_musica": 0,
-        "musica": "The Chain - 2004 Remaster",
-        "musica_id": "5e9TFTbltYBg2xThimr0rU",
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
         "genero": [
-            "classic rock",
-            "soft rock"
+            "classic rock"
         ],
-        "artista": "Fleetwood Mac",
-        "artista_id": "08GQAI4eElDnROBrJRGE0X",
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
         "volume": 87
     },
     {
-        "timestamp": "2025-04-04T00:04:33.395019",
-        "ritmo_cardiaco": 70,
+        "timestamp": "2025-04-04T01:10:00.392889",
+        "ritmo_cardiaco": 69,
         "decibeis_musica": 0,
-        "musica": "The Chain - 2004 Remaster",
-        "musica_id": "5e9TFTbltYBg2xThimr0rU",
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
         "genero": [
-            "classic rock",
-            "soft rock"
+            "classic rock"
         ],
-        "artista": "Fleetwood Mac",
-        "artista_id": "08GQAI4eElDnROBrJRGE0X",
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
         "volume": 87
     },
     {
-        "timestamp": "2025-04-04T00:04:35.234806",
+        "timestamp": "2025-04-04T01:10:02.434509",
+        "ritmo_cardiaco": 69,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:10:04.472695",
+        "ritmo_cardiaco": 69,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:10:06.423206",
+        "ritmo_cardiaco": 69,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:10:08.416712",
         "ritmo_cardiaco": 70,
         "decibeis_musica": 0,
-        "musica": "The Chain - 2004 Remaster",
-        "musica_id": "5e9TFTbltYBg2xThimr0rU",
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
         "genero": [
-            "classic rock",
-            "soft rock"
+            "classic rock"
         ],
-        "artista": "Fleetwood Mac",
-        "artista_id": "08GQAI4eElDnROBrJRGE0X",
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:10:10.536708",
+        "ritmo_cardiaco": 68,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:10:12.427713",
+        "ritmo_cardiaco": 69,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:10:14.418269",
+        "ritmo_cardiaco": 71,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:10:16.418690",
+        "ritmo_cardiaco": 71,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:10:18.449770",
+        "ritmo_cardiaco": 72,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:10:20.420688",
+        "ritmo_cardiaco": 73,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:10:22.382407",
+        "ritmo_cardiaco": 73,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:10:24.382769",
+        "ritmo_cardiaco": 76,
+        "decibeis_musica": 0,
+        "musica": "Romeo And Juliet",
+        "musica_id": "0PNt5WTw092eED0ru9SuIp",
+        "genero": [
+            "classic rock"
+        ],
+        "artista": "Dire Straits",
+        "artista_id": "0WwSkZ7LtFUFjGjMZBMt6T",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:10:26.397040",
+        "ritmo_cardiaco": 76,
+        "decibeis_musica": 0,
+        "musica": "Shakira: Bzrp Music Sessions, Vol. 53",
+        "musica_id": "4nrPB8O7Y7wsOCJdgXkthe",
+        "genero": [
+            "argentine trap",
+            "trap latino",
+            "urbano latino"
+        ],
+        "artista": "Bizarrap",
+        "artista_id": "716NhGYqD1jl2wI1Qkgq36",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:10:28.410201",
+        "ritmo_cardiaco": 77,
+        "decibeis_musica": 0,
+        "musica": "Shakira: Bzrp Music Sessions, Vol. 53",
+        "musica_id": "4nrPB8O7Y7wsOCJdgXkthe",
+        "genero": [
+            "argentine trap",
+            "trap latino",
+            "urbano latino"
+        ],
+        "artista": "Bizarrap",
+        "artista_id": "716NhGYqD1jl2wI1Qkgq36",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:10:30.396956",
+        "ritmo_cardiaco": 81,
+        "decibeis_musica": 0,
+        "musica": "Shakira: Bzrp Music Sessions, Vol. 53",
+        "musica_id": "4nrPB8O7Y7wsOCJdgXkthe",
+        "genero": [
+            "argentine trap",
+            "trap latino",
+            "urbano latino"
+        ],
+        "artista": "Bizarrap",
+        "artista_id": "716NhGYqD1jl2wI1Qkgq36",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:10:32.402260",
+        "ritmo_cardiaco": 83,
+        "decibeis_musica": 0,
+        "musica": "Shakira: Bzrp Music Sessions, Vol. 53",
+        "musica_id": "4nrPB8O7Y7wsOCJdgXkthe",
+        "genero": [
+            "argentine trap",
+            "trap latino",
+            "urbano latino"
+        ],
+        "artista": "Bizarrap",
+        "artista_id": "716NhGYqD1jl2wI1Qkgq36",
+        "volume": 87
+    },
+    {
+        "timestamp": "2025-04-04T01:10:34.627740",
+        "ritmo_cardiaco": 91,
+        "decibeis_musica": 0,
+        "musica": "Shakira: Bzrp Music Sessions, Vol. 53",
+        "musica_id": "4nrPB8O7Y7wsOCJdgXkthe",
+        "genero": [
+            "argentine trap",
+            "trap latino",
+            "urbano latino"
+        ],
+        "artista": "Bizarrap",
+        "artista_id": "716NhGYqD1jl2wI1Qkgq36",
         "volume": 87
     }
 ]

@@ -11,7 +11,7 @@ import math
 import requests
 from .models import *
 from django.shortcuts import render
-
+import portalocker
 
 def get_access_token(request):
     session_key = request.session.session_key
@@ -276,6 +276,7 @@ from .connect_garmin import get_latest_heart_rate
 from .extras import spotify_requests_execution
 
 JSON_FILE = "dados_ritmo.json"
+import time
 
 
 class SyncedHeartRateMusic(APIView):
@@ -347,25 +348,32 @@ class SyncedHeartRateMusic(APIView):
 
         return Response(response_data, status=200)
 
-
-
     def _guardar_json(self, entrada):
-        """Guarda a entrada no ficheiro JSON sem sobrescrever os anteriores."""
-        dados = []
-        if os.path.exists(JSON_FILE):
-            with open(JSON_FILE, "r") as f:
-                try:
-                    dados = json.load(f)
-                except json.JSONDecodeError:
-                    pass
+        """Guarda os dados mantendo o histórico completo com lock"""
+        for _ in range(3):  # Tentar até 3 vezes em caso de conflito
+            try:
+                with open(JSON_FILE, 'r+') as f:
+                    portalocker.lock(f, portalocker.LOCK_EX)  # Bloqueio exclusivo
 
-        dados.append(entrada)
+                    # Tenta ler dados existentes
+                    try:
+                        dados = json.load(f)
+                    except (json.JSONDecodeError, FileNotFoundError):
+                        dados = []
 
-        with open(JSON_FILE, "w") as f:
-            json.dump(dados, f, indent=4)
+                    # Adiciona nova entrada
+                    dados.append(entrada)
 
-        #print(f"✅ Dados guardados: {entrada}")
+                    # Reescreve o arquivo inteiro
+                    f.seek(0)
+                    json.dump(dados, f, indent=4)
+                    f.truncate()
 
+                    return
+            except (IOError, portalocker.LockException) as e:
+                print(f"Erro de E/S, tentando novamente... ({str(e)})")
+                time.sleep(0.1)
+        raise Exception("Falha ao escrever no arquivo após 3 tentativas")
 
 # views.py
 from django.http import JsonResponse
@@ -374,57 +382,83 @@ from .extract_info import calcular_media_ritmo_por_artista, calcular_media_ritmo
 
 def artist_stats(request):
     try:
-        with open(JSON_FILE, 'r') as f:
-            try:
-                data = json.load(f)
-            except json.JSONDecodeError as e:
-                print(f"Erro no JSON na linha {e.lineno}, coluna {e.colno}: {e.msg}")
-                print("Conteúdo problemático:", f.read()[e.pos - 50:e.pos + 50])
-                return JsonResponse({"error": "Invalid JSON format"}, status=500)
-
-        sort_order = request.GET.get('sort', 'desc')
-        stats = calcular_media_ritmo_por_artista(data)
-        sorted_stats = sorted(stats.items(),
-                              key=lambda x: x[1]['media_ritmo_cardiaco'],
-                              reverse=(sort_order == 'desc'))
-
-        #print(f"Artistas: {sorted_stats}")
-        return JsonResponse(dict(sorted_stats), safe=False)
-
-    except Exception as e:
-        print("Erro em artist_stats:", str(e))
-        return JsonResponse({"error": str(e)}, status=500)
-
-
-def genre_stats(request):
-    try:
+        import portalocker
         min_count = int(request.GET.get('min_count', 40))
         sort_order = request.GET.get('sort', 'desc')
 
         with open(JSON_FILE, 'r') as f:
-            data = json.load(f)
+            portalocker.lock(f, portalocker.LOCK_SH)
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError as e:
+                return JsonResponse({"error": "Invalid JSON format"}, status=500)
+            finally:
+                portalocker.unlock(f)
 
-        stats = calcular_media_ritmo_por_genero(data)
+        stats = calcular_media_ritmo_por_artista(data)
 
-        # Filtra e converte para dicionário serializável
+        # Filtrar e formatar para o frontend
         filtered_stats = {
             k: {
-                **v,
-                "musicas": list(v["musicas"])  # Converte para lista
+                "artista": v["artista"],
+                "media_ritmo_cardiaco": v["media_ritmo_cardiaco"],
+                "contagem": v["contagem"]
             }
-            for k, v in stats.items()
-            if v["contagem"] > min_count
+            for k, v in stats.items() if v["contagem"] > min_count
         }
 
-        sorted_stats = sorted(filtered_stats.items(),
-                              key=lambda x: x[1]['media_ritmo_cardiaco'],
-                              reverse=(sort_order == 'desc'))
+        sorted_stats = sorted(
+            filtered_stats.items(),
+            key=lambda x: x[1]["media_ritmo_cardiaco"],
+            reverse=(sort_order == 'desc')
+        )
 
-        #print(f"generos: {sorted_stats}")
         return JsonResponse(dict(sorted_stats), safe=False)
 
     except Exception as e:
-        print("Erro em genre_stats:", str(e))
+        print(f"Erro em artist_stats: {str(e)}")
+        return JsonResponse({"error": str(e)}, status=500)
+import traceback
+
+
+def genre_stats(request):
+    try:
+        import portalocker
+        min_count = int(request.GET.get('min_count', 40))
+        sort_order = request.GET.get('sort', 'desc')
+
+        with open(JSON_FILE, 'r') as f:
+            portalocker.lock(f, portalocker.LOCK_SH)
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError as e:
+                return JsonResponse({"error": "Invalid JSON format"}, status=500)
+            finally:
+                portalocker.unlock(f)
+
+        stats = calcular_media_ritmo_por_genero(data)
+        print(f"STATS {stats}")
+
+        # Filtrar e formatar para o frontend
+        filtered_stats = {
+            k: {
+                "media_ritmo_cardiaco": v["media_ritmo_cardiaco"],
+                "contagem": v["contagem"],
+                "musicas": list(v["musicas"])
+            }
+            for k, v in stats.items() if v["contagem"] > min_count
+        }
+
+        sorted_stats = sorted(
+            filtered_stats.items(),
+            key=lambda x: x[1]["media_ritmo_cardiaco"],
+            reverse=(sort_order == 'desc')
+        )
+        print(f"sortedSTATS {sorted_stats}")
+        return JsonResponse(dict(sorted_stats), safe=False)
+
+    except Exception as e:
+        print(f"Erro em genre_stats: {str(e)}")
         return JsonResponse({"error": str(e)}, status=500)
 
 

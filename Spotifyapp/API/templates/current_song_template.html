@@ -374,6 +374,7 @@
         // Função para atualizar gráficos
         async function updateAnalysisCharts() {
             try {
+                console.log("NO UPDATE ANALYSIS CHARTS")
                 const [artistRes, genreRes] = await Promise.all([
                     fetch(`/spotify/api/artist-stats/?min_count=40&sort=${document.getElementById('artist-sort').value}`),
                     fetch(`/spotify/api/genre-stats/?min_count=40&sort=${document.getElementById('genre-sort').value}`)
@@ -395,6 +396,7 @@
         }
 
        function updateChartData(chart, data, color) {
+            console.log("NO UPDATE CHART DATA")
             const sortOrder = chart === artistChart
                 ? document.getElementById('artist-sort').value
                 : document.getElementById('genre-sort').value;
@@ -492,11 +494,17 @@
                     await $.ajax({
                         url: "/spotify/controls/",
                         method: "POST",
-                        headers: { /* ... */ },
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val()
+                        },
                         data: JSON.stringify({
                             key: userKey,
                             action: "skip"
                         })
+                    }).fail(function(jqXHR) {
+                        console.error("Erro no skip:", jqXHR.responseJSON);
+                        throw new Error("Falha ao pular música");
                     });
 
                     // 3. Forçar atualização

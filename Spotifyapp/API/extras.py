@@ -191,34 +191,26 @@ def spotify_seek(session_id, position_ms):
 
 
 from ctypes import cast, POINTER
-from comtypes import CLSCTX_ALL, CoInitialize, CoUninitialize
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+import comtypes
+from comtypes import CoInitialize, CoUninitialize, CLSCTX_ALL
+from comtypes.automation import POINTER
+comtypes.CoUninitialize()  # Limpa qualquer estado residual
 
-'''def get_system_volume():
-    devices = AudioUtilities.GetSpeakers()
-    interface = devices.Activate(
-        IAudioEndpointVolume._iid_, CLSCTX_ALL, None
-    )
-    volume = cast(interface, POINTER(IAudioEndpointVolume))
-    return volume.GetMasterVolumeLevelScalar() * 100  # Retorna em %
-
-'''
 def get_system_volume():
     try:
-        CoInitialize()  # Inicializa o COM
+        CoInitialize()  # Inicializa o COM uma vez por thread
         devices = AudioUtilities.GetSpeakers()
-        if not devices:
-            return 0  # Retorna 0 se não houver dispositivos
-
         interface = devices.Activate(
             IAudioEndpointVolume._iid_,
-            CLSCTX_ALL, None
+            CLSCTX_ALL,
+            None
         )
-        volume_interface = cast(interface, POINTER(IAudioEndpointVolume))
-
-        volume = volume_interface.GetMasterVolumeLevelScalar() * 100  # Converte para percentual
-        return int(volume)
-
+        volume = cast(interface, POINTER(IAudioEndpointVolume))
+        current_volume = volume.GetMasterVolumeLevelScalar()
+        return int(current_volume * 100)
     except Exception as e:
-        print(f"Erro ao obter volume do sistema: {e}")
-        return 0  # Retorna 0 em caso de erro
+        print(f"Erro ao obter volume: {str(e)}")
+        return 50  # Valor padrão seguro
+    finally:
+        CoUninitialize()  # Libera recursos COM obrigatoriamente
