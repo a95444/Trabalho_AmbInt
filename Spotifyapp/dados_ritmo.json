@@ -43404,5 +43404,70 @@
         "artista": "Il Divo",
         "artista_id": "3KNZ9AOjBajjmr6ZR2VGfl",
         "volume": 47
+    },
+    {
+        "timestamp": "2025-04-04T22:08:46.508417",
+        "ritmo_cardiaco": 70,
+        "decibeis_musica": 0,
+        "musica": "I Believe in You (Je crois en toi)",
+        "musica_id": "1ODl034REBScrSzb4xWNNE",
+        "genero": [
+            "opera"
+        ],
+        "artista": "Il Divo",
+        "artista_id": "3KNZ9AOjBajjmr6ZR2VGfl",
+        "volume": 47
+    },
+    {
+        "timestamp": "2025-04-04T22:08:51.265308",
+        "ritmo_cardiaco": 69,
+        "decibeis_musica": 0,
+        "musica": "I Believe in You (Je crois en toi)",
+        "musica_id": "1ODl034REBScrSzb4xWNNE",
+        "genero": [
+            "opera"
+        ],
+        "artista": "Il Divo",
+        "artista_id": "3KNZ9AOjBajjmr6ZR2VGfl",
+        "volume": 47
+    },
+    {
+        "timestamp": "2025-04-04T22:08:56.272863",
+        "ritmo_cardiaco": 69,
+        "decibeis_musica": 0,
+        "musica": "I Believe in You (Je crois en toi)",
+        "musica_id": "1ODl034REBScrSzb4xWNNE",
+        "genero": [
+            "opera"
+        ],
+        "artista": "Il Divo",
+        "artista_id": "3KNZ9AOjBajjmr6ZR2VGfl",
+        "volume": 47
+    },
+    {
+        "timestamp": "2025-04-04T22:09:01.408693",
+        "ritmo_cardiaco": 70,
+        "decibeis_musica": 0,
+        "musica": "I Believe in You (Je crois en toi)",
+        "musica_id": "1ODl034REBScrSzb4xWNNE",
+        "genero": [
+            "opera"
+        ],
+        "artista": "Il Divo",
+        "artista_id": "3KNZ9AOjBajjmr6ZR2VGfl",
+        "volume": 47
+    },
+    {
+        "timestamp": "2025-04-04T22:09:06.282733",
+        "ritmo_cardiaco": 70,
+        "decibeis_musica": 0,
+        "musica": "I Believe in You (Je crois en toi)",
+        "musica_id": "1ODl034REBScrSzb4xWNNE",
+        "genero": [
+            "opera"
+        ],
+        "artista": "Il Divo",
+        "artista_id": "3KNZ9AOjBajjmr6ZR2VGfl",
+        "volume": 47
     }
 ]
