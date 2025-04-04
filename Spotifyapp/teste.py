@@ -54,3 +54,38 @@ def clean_json(input_file, output_file):
 
 
 clean_json('dados_ritmo.json', 'dados_ritmo.json')'''
+
+
+
+
+from ctypes import cast, POINTER
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+import comtypes
+from comtypes import CoInitialize, CoUninitialize, CLSCTX_ALL
+from comtypes.automation import POINTER
+comtypes.CoUninitialize()  # Limpa qualquer estado residual
+
+def set_system_volume(volume_percent=30):
+    try:
+        CoInitialize()  # Inicializa o COM para esta thread
+        devices = AudioUtilities.GetSpeakers()
+        interface = devices.Activate(
+            IAudioEndpointVolume._iid_,
+            CLSCTX_ALL,
+            None
+        )
+        volume = cast(interface, POINTER(IAudioEndpointVolume))
+
+        # Garante que o valor está entre 0% e 100%
+        volume_level = max(0.0, min(1.0, volume_percent / 100.0))
+        volume.SetMasterVolumeLevelScalar(volume_level, None)
+        return True
+    except Exception as e:
+        print(f"Erro ao definir volume: {str(e)}")
+        return False
+    finally:
+        CoUninitialize()  # Libera recursos COM obrigatoriamente
+
+
+# Para definir para 30%
+set_system_volume(30)

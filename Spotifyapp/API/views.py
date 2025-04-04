@@ -538,3 +538,44 @@ def play_calm_song(request):
             'status': 'error',
             'message': str(e)
         }, status=400)
+
+def set_volume_down(request):
+    set_system_volume()
+    return JsonResponse({"status": "Success", "message": "Volume set to 30%"}, safe=False)
+
+
+# views.py
+import requests
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import os
+# Corrija a definição da URL (remova a linha hardcoded do HTML)
+# Adicione isto no início do arquivo:
+import os
+from django.http import JsonResponse
+import requests
+
+WEBHOOK_URL = "https://hook.eu2.make.com/0a1185wba2jcsi8utipxo46qf2ug3htx"  # URL fixa
+
+@csrf_exempt  # Descomente e mantenha isso
+def trigger_make_webhook(request):
+    print("WEBHOOK COMECOU")
+    try:
+        print("WEBHOOK A CORRER BEM")
+        payload = {
+            "event": "notification_pushup",
+            "user_id": 1,
+            "timestamp": "2024-04-05T10:00:00Z"
+        }
+
+        response = requests.post(
+            WEBHOOK_URL,  # Usa a URL fixa corrigida
+            json=payload,
+            timeout=5
+        )
+
+        return JsonResponse({"status": "Webhook acionado!" if response.status_code == 200 else "Erro no Make"})
+
+    except Exception as e:
+        print("WEBHOOK A CORREU MALLLL")
+        return JsonResponse({"error": str(e)}, status=500)

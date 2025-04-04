@@ -140,10 +140,77 @@
     </div>
 </div>
 
+
+<!--Modal para volume elevado de música-->
+<div id="volume-modal" class="modal">
+    <div class="modal-content">
+        <h3>🔊 Aviso de Volume elevado!</h3>
+        <p>Detetámos que o volume está acima do recomendado. Deseja reduzir o volume?</p>
+        <div class="modal-buttons">
+            <button id="confirm-volume-down">Sim, por favor</button>
+            <button id="cancel-volume-down" >Não, obrigado</button>
+        </div>
+    </div>
+</div>
+
+<!-- Adicione isto no seu template HTML -->
+<button id="triggerBtn" onclick="triggerWebhook()" class="webhook-button">
+  Testar Webhook
+</button>
+<div id="statusMessage" class="status-message"></div>
+
+
+<script>        async function triggerWebhook() {
+    const btn = document.getElementById('triggerBtn');
+    const statusDiv = document.getElementById('statusMessage');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="loading"></div> Processando...';
+
+    try {
+      const response = await fetch('/spotify/api/trigger-webhook/', {  // Caminho corrigido
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': $("[name=csrfmiddlewaretoken]").val()
+        },
+        body: JSON.stringify({
+          event: "test_click",
+          data: {
+            test_id: Date.now(),
+            origin: "button_test"
+          }
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data.error || 'Erro desconhecido');
+
+      statusDiv.className = 'status-message success';
+      statusDiv.innerHTML = '✅ Webhook acionado com sucesso!';
+      statusDiv.style.display = 'block';
+
+    } catch (error) {
+      statusDiv.className = 'status-message error';
+      statusDiv.innerHTML = `❌ Erro: ${error.message}`;
+      statusDiv.style.display = 'block';
+      console.error('Erro:', error);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = 'Testar Webhook';
+      setTimeout(() => {
+        statusDiv.style.display = 'none';
+      }, 5000);
+    }
+  }
+</script>
+
+
 </body>
     <script>
 
         $(document).ready(function() {
+
 
         // Elementos da página
         const progressBar = document.getElementById("progress-bar");
@@ -374,7 +441,7 @@
         // Função para atualizar gráficos
         async function updateAnalysisCharts() {
             try {
-                console.log("NO UPDATE ANALYSIS CHARTS")
+                //console.log("NO UPDATE ANALYSIS CHARTS")
                 const [artistRes, genreRes] = await Promise.all([
                     fetch(`/spotify/api/artist-stats/?min_count=40&sort=${document.getElementById('artist-sort').value}`),
                     fetch(`/spotify/api/genre-stats/?min_count=40&sort=${document.getElementById('genre-sort').value}`)
@@ -396,7 +463,7 @@
         }
 
        function updateChartData(chart, data, color) {
-            console.log("NO UPDATE CHART DATA")
+            //console.log("NO UPDATE CHART DATA")
             const sortOrder = chart === artistChart
                 ? document.getElementById('artist-sort').value
                 : document.getElementById('genre-sort').value;
@@ -522,9 +589,22 @@
         }
 
 
+        function volumedown() {
+            $.get('/spotify/api/set_volume_down/')
+             .done(function(data) {
+                 console.log('Volume reduzido:', data);
+                 // Atualize a interface aqui se necessário
+             })
+             .fail(function(error) {
+                 console.error('Erro ao reduzir volume:', error);
+             });
+        }
+
         // Função para atualizar a UI com os dados sincronizados
         let notification_on= 1;
         let notificationTimeout;
+        let notification_volume_on=1;
+        let notificationvolumeTimeout;
         function fetchSyncedData() {
             fetch(`/spotify/api/synced-data/?session_key=${userKey}`, {
                 method: "GET",
@@ -564,10 +644,12 @@
 
                     // Atualiza o valor do heart rate
                     if (data.ritmo_cardiaco) {
+                        //console.log("RITMO CARDIACO")
+                        //console.log(data.ritmo_cardiaco)
                         heartRateValueElement.text(`${data.ritmo_cardiaco} BPM`);
                         // Ajusta a velocidade da animação do coração (pulse) com base no BPM
                         if(data.ritmo_cardiaco>70&&notification_on===1){
-                            console.log("AAAAAAAAAAAAAAAAAAAAAAA");
+                            //console.log("AAAAAAAAAAAAAAAAAAAAAAA");
                             notification_on=0;
 
                             // Mostrar o modal
@@ -604,6 +686,37 @@
                     // Atualiza a correlação de volume/decibéis, se esses dados estiverem presentes
                     if (data.volume) {
                         volumeCorrelationElement.text(`Volume: ${data.volume || "--"}% `);
+                        if(data.volume>50 && notification_volume_on===1){
+                            //console.log("AAAAAAAAAAAAAAAAAAAAAAA");
+                            notification_volume_on=0;
+
+                            // Mostrar o modal
+                            const modal = document.getElementById('volume-modal');
+                            modal.style.display = 'block';
+
+                            // Configurar os botões
+                            document.getElementById('confirm-volume-down').onclick = () => {
+                                //clearTimeout(notificationTimeout);
+                                modal.style.display = 'none';
+                                // Chamar função para reduzir volume
+                                volumedown();
+                            };
+
+                            document.getElementById('cancel-volume-down').onclick = () => {
+                                //clearTimeout(notificationTimeout);
+                                modal.style.display = 'none';
+
+                            };
+
+
+                            //if (notificationTimeout) clearTimeout(notificationTimeout);
+
+                            notificationvolumeTimeout = setTimeout(() => {
+                                notification_volume_on = 1;
+                                console.log("Notificações de volume reativadas");
+                            }, 120000);
+
+                        }
                     }
 
                     if (data.ritmo_cardiaco && data.volume) {
@@ -730,12 +843,67 @@
 
         initializeAnalysisCharts();
 
+
+
         }
 
             );
     </script>
 
     <style>
+        .webhook-button {
+    padding: 12px 24px;
+    background-color: #1DB954; /* Verde do Spotify */
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+
+  .webhook-button:hover {
+    background-color: #1ED760;
+  }
+
+  .webhook-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+
+  .status-message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+  }
+
+  .success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  .error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+
+  .loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
 
                 .modal {
             display: none;
@@ -785,6 +953,17 @@
             background-color: #535353;
             color: white;
         }
+
+        #confirm-volume-down {
+            background-color: #1d88b9; /* Verde Spotify */
+            color: white;
+        }
+
+        #cancel-volume-down {
+            background-color: #535353;
+            color: white;
+        }
+
         /* Tailwind Custom continuous animation for fast spinning */
         @keyframes spin-fast {
             0% {
