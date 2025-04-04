@@ -12,12 +12,25 @@ import requests
 from .models import *
 from django.shortcuts import render
 import portalocker
+import requests
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import os
+import json
+from datetime import datetime
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import status
+from django.shortcuts import redirect
+from .connect_garmin import get_latest_heart_rate
+from .extras import spotify_requests_execution
+from rest_framework import status
+from rest_framework.response import Response
 
 def get_access_token(request):
     session_key = request.session.session_key
     token = Token.objects.get(user=session_key)
     return JsonResponse({'access_token': token.access_token})
-
 
 class AuthenticationURL(APIView):
     def get(self, request, format=None):
@@ -30,7 +43,6 @@ class AuthenticationURL(APIView):
                          'client_id': CLIENT_ID
                      }).prepare().url
         return HttpResponseRedirect(url)
-
 
 def spotify_redirect(request, format=None):
     code=request.GET.get('code')
@@ -103,15 +115,9 @@ class CheckAuthentication(APIView):
             redirect_url=f"http://127.0.0.1:8000/spotify/auth-url"
             return HttpResponseRedirect(redirect_url)
 
-
-
 def home(request):
     return render(request, 'home.html')
 
-
-
-from rest_framework import status
-from rest_framework.response import Response
 
 
 class CurrentSong(APIView):
@@ -264,16 +270,6 @@ class SpotifyControls(APIView):
         return Response({"heart_rate": latest_hr.heart_rate})
 '''
 
-import json
-import os
-import math
-from datetime import datetime
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import status
-from django.shortcuts import redirect
-from .connect_garmin import get_latest_heart_rate
-from .extras import spotify_requests_execution
 
 JSON_FILE = "dados_ritmo.json"
 import time
@@ -344,9 +340,9 @@ class SyncedHeartRateMusic(APIView):
             "volume": volume
         }
 
-        self._guardar_json(entrada)
+        #self._guardar_json(entrada)
 
-        return Response(response_data, status=200)
+        return Response((response_data, entrada), status=200)
 
     def _guardar_json(self, entrada):
         """Guarda os dados mantendo o histórico completo com lock"""
@@ -374,6 +370,31 @@ class SyncedHeartRateMusic(APIView):
                 print(f"Erro de E/S, tentando novamente... ({str(e)})")
                 time.sleep(0.1)
         raise Exception("Falha ao escrever no arquivo após 3 tentativas")
+
+
+# views.py
+@csrf_exempt
+def save_latest(request):
+    if request.method == 'POST':
+        try:
+            entrada = json.loads(request.body)
+
+            with open(JSON_FILE, 'r+') as f:
+                portalocker.lock(f, portalocker.LOCK_EX)
+                dados = json.load(f)
+                dados.append(entrada)
+                f.seek(0)
+                json.dump(dados, f, indent=4)
+                f.truncate()
+
+            return JsonResponse({"status": "Dado salvo"})
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Método não permitido"}, status=405)
+
+
 
 # views.py
 from django.http import JsonResponse
@@ -543,17 +564,6 @@ def set_volume_down(request):
     set_system_volume()
     return JsonResponse({"status": "Success", "message": "Volume set to 30%"}, safe=False)
 
-
-# views.py
-import requests
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-import os
-# Corrija a definição da URL (remova a linha hardcoded do HTML)
-# Adicione isto no início do arquivo:
-import os
-from django.http import JsonResponse
-import requests
 
 WEBHOOK_URL = "https://hook.eu2.make.com/0a1185wba2jcsi8utipxo46qf2ug3htx"  # URL fixa
 

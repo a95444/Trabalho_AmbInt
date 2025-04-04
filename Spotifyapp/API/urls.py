@@ -17,4 +17,5 @@ urlpatterns=[
     path('api/get-token/', get_access_token, name='get-token'),
     path('api/set_volume_down/', set_volume_down, name='set_volume_down'),
     path('api/trigger-webhook/', trigger_make_webhook, name='trigger-webhook'),
+    path('api/save-latest/', save_latest, name='save-latest'),
     ]

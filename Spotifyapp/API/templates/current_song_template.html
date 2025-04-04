@@ -14,7 +14,7 @@
 <body class="bg-gray-900 text-white font-sans">
 {% csrf_token %}
 
-<!-- Adicione isto dentro da tag <body>, preferencialmente no início -->
+
     <div class="fixed top-0 right-0 z-50 p-4">
         <a href="/spotify/redirect"
            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300">
@@ -66,13 +66,38 @@
         </div>
     </div>
 
-
-        </div>
-
+<div class="config-container p-6 bg-gray-800 rounded-lg mt-6">
+    <!-- Slider Ritmo Cardíaco -->
+    <div class="mb-8">
+        <label class="block text-lg mb-2">
+            Limite Ritmo Cardíaco (BPM):
+            <span id="bpmValue">70</span>
+        </label>
+        <input type="range"
+               min="60"
+               max="120"
+               value="70"
+               class="heart-rate-slider"
+               id="heartRateSlider">
     </div>
 
-    <!-- Heart Rate Section -->
-    <div id="heart-rate-section" class="mt-8 p-6 bg-gray-800 rounded-xl shadow-lg">
+    <!-- Slider Volume -->
+    <div>
+        <label class="block text-lg mb-2">
+            Limite Volume (%):
+            <span id="volumeValue">50</span>
+        </label>
+        <input type="range"
+               min="0"
+               max="100"
+               value="50"
+               class="volume-slider"
+               id="volumeSlider">
+    </div>
+</div>
+
+<!-- Heart Rate Section -->
+<div id="heart-rate-section" class="mt-8 p-6 bg-gray-800 rounded-xl shadow-lg">
         <h3 class="text-2xl font-bold mb-4 text-center">Heart Rate Monitor</h3>
 
         <!-- Heart Rate Value with Animation -->
@@ -95,8 +120,8 @@
     </div>
 </div>
 
-<!-- Visual Graph (Simple Bar for now) -->
-<!-- Contêiner do gráfico com tamanho fixo -->
+
+<!-- Visual Graph -->
 <div class="w-full max-w-3xl mx-auto bg-gray-800 rounded-lg p-4 mt-6">
     <canvas id="heartVolumeChart" height="300"></canvas>
 </div>
@@ -223,15 +248,27 @@
         const volumeCorrelationElement = $("#volume-heart-correlation");
         const genreEffectElement = $("#genre-effect");
 
+
+
         // A session key é passada pelo Django via template
         const userKey = "{{ user_key }}";
-
         // Função para formatar milissegundos para mm:ss
         function formatTime(ms) {
             const minutes = Math.floor(ms / 60000);
             const seconds = Math.floor((ms % 60000) / 1000).toString().padStart(2, '0');
             return `${minutes}:${seconds}`;
         }
+
+
+        // JavaScript Simples
+        document.getElementById('heartRateSlider').addEventListener('input', function(e) {
+            document.getElementById('bpmValue').textContent = e.target.value;
+        });
+
+        document.getElementById('volumeSlider').addEventListener('input', function(e) {
+            document.getElementById('volumeValue').textContent = e.target.value;
+        });
+
 
         // Adicionar um canvas para o gráfico no HTML
         // Configuração inicial do gráfico
@@ -372,8 +409,6 @@
             heartVolumeChart.data.datasets[1].data = volumeData;
             heartVolumeChart.update();
         }
-
-
 
         // Gráficos de análise
         let artistChart, genreChart;
@@ -591,6 +626,10 @@
 
 
         function volumedown() {
+            const settings = {
+                        bpm: document.getElementById('heartRateSlider').value,
+                        volume: document.getElementById('volumeSlider').value
+                    };
             $.get('/spotify/api/set_volume_down/')
              .done(function(data) {
                  console.log('Volume reduzido:', data);
@@ -639,6 +678,168 @@
         let notificationTimeout;
         let notification_volume_on=1;
         let notificationvolumeTimeout;
+        let ultimoDado = null;
+
+        // Atualização RÁPIDA (1s) - Apenas UI
+        function atualizarUI() {
+            fetch(`/spotify/api/synced-data/?session_key=${userKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    ultimoDado = data[1];  // Guarda para possível salvamento
+                    UI_data = data[0]
+                    //console.log("ULTIMO DADO:");
+                    //console.log(ultimoDado);
+                    //console.log("UI DATA:");
+                    //console.log(UI_data);
+                    //updateChart(data.ritmo_cardiaco, data.volume);
+                    const settings = {
+                        bpm: document.getElementById('heartRateSlider').value,
+                        volume: document.getElementById('volumeSlider').value
+                    };
+
+                    if(UI_data.is_playing) {
+                        const progress = UI_data.progress_ms + (Date.now() - UI_data.timestamp);
+                        progressBar.value = progress;
+                        currentTimeLabel.textContent = formatTime(progress);
+                    }
+
+                    // Atualiza o título da música e artista se mudou
+                    if (UI_data.musica && songTitleElement) {
+                        songTitleElement.textContent = `${UI_data.musica} - ${UI_data.artista}`;
+                    }
+
+                    // Atualiza a imagem do álbum
+                    if (UI_data.album_cover && albumCover) {
+                        albumCover.src = UI_data.album_cover;
+                    }
+
+                    // Atualiza a progress bar se os dados de tempo estiverem disponíveis
+                    if (UI_data.duration && typeof UI_data.time !== "undefined") {
+                        progressBar.max = UI_data.duration;
+                        progressBar.value = UI_data.time;
+                        currentTimeLabel.textContent = formatTime(UI_data.time);
+                        totalTimeLabel.textContent = formatTime(UI_data.duration);
+                    }
+
+                    // Atualiza o valor do heart rate
+                    if (UI_data.ritmo_cardiaco) {
+                        //console.log("RITMO CARDIACO")
+                        //console.log(data.ritmo_cardiaco)
+                        heartRateValueElement.text(`${UI_data.ritmo_cardiaco} BPM`);
+                        // Ajusta a velocidade da animação do coração (pulse) com base no BPM
+                        if(UI_data.ritmo_cardiaco>settings.bpm && notification_on===1){
+                            //console.log("AAAAAAAAAAAAAAAAAAAAAAA");
+                            notification_on=0;
+                            iniciarTimer();
+
+                            // Mostrar o modal
+                            const modal = document.getElementById('calm-song-modal');
+                            modal.style.display = 'block';
+
+                            // Configurar os botões
+                            document.getElementById('confirm-calming').onclick = () => {
+                                modal.style.display = 'none';
+                                cancelarTimer();
+                                // Chamar função para tocar música calma
+                                playCalmingSong();
+                            };
+
+                            document.getElementById('cancel-calming').onclick = () => {
+                                //clearTimeout(notificationTimeout);
+                                modal.style.display = 'none';
+                                cancelarTimer();
+
+                            };
+
+
+                            //if (notificationTimeout) clearTimeout(notificationTimeout);
+
+                            notificationTimeout = setTimeout(() => {
+                                notification_on = 1;
+                                console.log("Notificações reativadas");
+                            }, 60000);
+
+                        }
+                        const pulseSpeed = Math.max(500, 2000 - (UI_data.ritmo_cardiaco * 10));
+                        $("#heart-icon").css("animation-duration", `${pulseSpeed}ms`);
+                    }
+
+                    // Atualiza a correlação de volume/decibéis, se esses dados estiverem presentes
+                    if (UI_data.volume) {
+                        volumeCorrelationElement.text(`Volume: ${UI_data.volume || "--"}% `);
+                        if(UI_data.volume>settings.volume && notification_volume_on===1){
+                            //console.log("AAAAAAAAAAAAAAAAAAAAAAA");
+                            notification_volume_on=0;
+
+                            // Mostrar o modal
+                            const modal = document.getElementById('volume-modal');
+                            modal.style.display = 'block';
+
+
+                            // Configurar os botões
+                            document.getElementById('confirm-volume-down').onclick = () => {
+                                modal.style.display = 'none';
+                                volumedown();
+                            };
+
+                            document.getElementById('cancel-volume-down').onclick = () => {
+                                modal.style.display = 'none';
+
+
+                            };
+
+
+                            //if (notificationTimeout) clearTimeout(notificationTimeout);
+
+                            notificationvolumeTimeout = setTimeout(() => {
+                                notification_volume_on = 1;
+                                console.log("Notificações de volume reativadas");
+                            }, 120000);
+
+                        }
+                    }
+
+                    if (UI_data.ritmo_cardiaco && UI_data.volume) {
+                        updateChart(UI_data.ritmo_cardiaco, UI_data.volume);
+                    }
+
+                    // Atualiza o gênero e efeito (exemplo)
+                    if (UI_data.genero) {
+                        const genStr = Array.isArray(UI_data.genero) && UI_data.genero.length > 0 ? UI_data.genero.join(", ") : "--";
+                        // Determina o efeito com base no ritmo cardíaco
+                        let efeito;
+                        if (UI_data.ritmo_cardiaco > 80) {
+                            efeito = "Estimulante";
+                        } else if (UI_data.ritmo_cardiaco >= 65 && UI_data.ritmo_cardiaco <= 79) {
+                            efeito = "Normal";
+                        } else {
+                            efeito = "Calmante";
+                        }
+
+                        // Atualiza o texto do elemento
+                        genreEffectElement.text(`Género: ${genStr} | Efeito: ${efeito}`);
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao buscar dados sincronizados:", error);
+                });
+        }
+
+        // Atualização LENTA (5s) - Salva no JSON
+        function salvarDadoPeriodicamente() {
+            if (ultimoDado) {
+                fetch('/spotify/api/save-latest/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': $("[name=csrfmiddlewaretoken]").val()
+                    },
+                    body: JSON.stringify(ultimoDado)
+                });
+            }
+        }
+
+
         function fetchSyncedData() {
             fetch(`/spotify/api/synced-data/?session_key=${userKey}`, {
                 method: "GET",
@@ -781,10 +982,12 @@
         }
 
         // Atualiza a progress bar e demais dados a cada 10 segundos
-        setInterval(fetchSyncedData, 5000);
+        //setInterval(fetchSyncedData, 5000);
+
+        setInterval(atualizarUI, 1000);     // UI: 1s
+        setInterval(salvarDadoPeriodicamente, 5000);  // JSON: 5s
 
 
-        // Exemplo de integração com controle (mantém os botões inalterados):
 
         // Skip Button
         $("#skip-btn").click(function() {
@@ -878,62 +1081,113 @@
 
         initializeAnalysisCharts();
 
-
-
         }
 
             );
     </script>
 
     <style>
+
+    /* Estilização do slider de progresso da música */
+    #progress-bar {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 4px;
+        background: #4a5568;
+        border-radius: 2px;
+    }
+
+    #progress-bar::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 16px;
+        height: 16px;
+        background: #1DB954; /* Verde do Spotify */
+        border-radius: 50%;
+        cursor: pointer;
+        transition: transform 0.1s;
+    }
+
+    /* Estilização dos sliders de configuração (BPM e Volume) */
+    .config-container input[type="range"] {
+        -webkit-appearance: none;
+        width: 300px;
+        height: 6px;
+        background: #4a5568;
+        border-radius: 3px;
+    }
+
+    .config-container input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: transform 0.1s;
+    }
+
+    /* Slider de BPM - Vermelho */
+    #heartRateSlider::-webkit-slider-thumb {
+        background: #ef4444;
+    }
+
+    /* Slider de Volume - Azul */
+    #volumeSlider::-webkit-slider-thumb {
+        background: #3b82f6;
+    }
+
+    /* Efeito hover para ambos */
+    .config-container input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.1);
+    }
+
         .webhook-button {
-    padding: 12px 24px;
-    background-color: #1DB954; /* Verde do Spotify */
-    color: white;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-  }
+        padding: 12px 24px;
+        background-color: #1DB954; /* Verde do Spotify */
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+      }
 
-  .webhook-button:hover {
-    background-color: #1ED760;
-  }
+      .webhook-button:hover {
+        background-color: #1ED760;
+      }
 
-  .webhook-button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
+      .webhook-button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
 
-  .status-message {
-    margin-top: 15px;
-    padding: 10px;
-    border-radius: 5px;
-    display: none;
-  }
+      .status-message {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 5px;
+        display: none;
+      }
 
-  .success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-  }
+      .success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
 
-  .error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-  }
+      .error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
 
-  .loading {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255,255,255,.3);
-    border-radius: 50%;
-    border-top-color: #fff;
-    animation: spin 1s ease-in-out infinite;
-  }
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255,255,255,.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+      }
 
   @keyframes spin {
     to { transform: rotate(360deg); }
