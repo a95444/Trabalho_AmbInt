@@ -118,7 +118,7 @@
     <!-- Gráfico de Generos -->
     <div class="bg-gray-800 p-6 rounded-xl">
         <div class="flex justify-between items-center mb-6">
-            <h3 class="text-2xl font-bold">Ritmo Cardíaco por Gênero</h3>
+            <h3 class="text-2xl font-bold">Ritmo Cardíaco por Género</h3>
             <select id="genre-sort" class="bg-gray-700 text-white px-4 py-2 rounded-lg">
                 <option value="desc">Maiores Médias</option>
                 <option value="asc">Menores Médias</option>
@@ -160,49 +160,50 @@
 <div id="statusMessage" class="status-message"></div>
 
 
-<script>        async function triggerWebhook() {
-    const btn = document.getElementById('triggerBtn');
-    const statusDiv = document.getElementById('statusMessage');
-    btn.disabled = true;
-    btn.innerHTML = '<div class="loading"></div> Processando...';
+<script>
+    async function triggerWebhook() {
+        const btn = document.getElementById('triggerBtn');
+        const statusDiv = document.getElementById('statusMessage');
+        btn.disabled = true;
+        btn.innerHTML = '<div class="loading"></div> Processando...';
 
-    try {
-      const response = await fetch('/spotify/api/trigger-webhook/', {  // Caminho corrigido
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': $("[name=csrfmiddlewaretoken]").val()
-        },
-        body: JSON.stringify({
-          event: "test_click",
-          data: {
-            test_id: Date.now(),
-            origin: "button_test"
-          }
-        })
-      });
+        try {
+          const response = await fetch('/spotify/api/trigger-webhook/', {  // Caminho corrigido
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': $("[name=csrfmiddlewaretoken]").val()
+            },
+            body: JSON.stringify({
+              event: "test_click",
+              data: {
+                test_id: Date.now(),
+                origin: "button_test"
+              }
+            })
+          });
 
-      const data = await response.json();
+          const data = await response.json();
 
-      if (!response.ok) throw new Error(data.error || 'Erro desconhecido');
+          if (!response.ok) throw new Error(data.error || 'Erro desconhecido');
 
-      statusDiv.className = 'status-message success';
-      statusDiv.innerHTML = '✅ Webhook acionado com sucesso!';
-      statusDiv.style.display = 'block';
+          statusDiv.className = 'status-message success';
+          statusDiv.innerHTML = '✅ Webhook acionado com sucesso!';
+          statusDiv.style.display = 'block';
 
-    } catch (error) {
-      statusDiv.className = 'status-message error';
-      statusDiv.innerHTML = `❌ Erro: ${error.message}`;
-      statusDiv.style.display = 'block';
-      console.error('Erro:', error);
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = 'Testar Webhook';
-      setTimeout(() => {
-        statusDiv.style.display = 'none';
-      }, 5000);
-    }
-  }
+        } catch (error) {
+          statusDiv.className = 'status-message error';
+          statusDiv.innerHTML = `❌ Erro: ${error.message}`;
+          statusDiv.style.display = 'block';
+          console.error('Erro:', error);
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = 'Testar Webhook';
+          setTimeout(() => {
+            statusDiv.style.display = 'none';
+          }, 5000);
+        }
+      }
 </script>
 
 
@@ -600,6 +601,39 @@
              });
         }
 
+
+        //FUNÇÕES DE TIMER
+        let timer;
+        let tempoLimite = 15000; // 15 segundos em milissegundos
+
+        // Função que será executada se o tempo expirar
+        function acaoNoTimeout() {
+          console.log("15 segundos se passaram sem o evento ocorrer");
+          // Coloque aqui a função que deve executar
+          triggerWebhook();
+        }
+
+        // Função para INICIAR/RESETAR o timer
+        function iniciarTimer() {
+          // Cancela o timer anterior se existir
+          if (timer) {
+            clearTimeout(timer);
+          }
+          // Inicia novo timer
+          timer = setTimeout(acaoNoTimeout, tempoLimite);
+          console.log("Timer iniciado/reiniciado");
+        }
+
+        // Função para CANCELAR o timer (quando o evento desejado ocorre)
+        function cancelarTimer() {
+          if (timer) {
+            clearTimeout(timer);
+            timer = null;
+            console.log("Timer cancelado - evento ocorreu");
+          }
+        }
+
+
         // Função para atualizar a UI com os dados sincronizados
         let notification_on= 1;
         let notificationTimeout;
@@ -651,6 +685,7 @@
                         if(data.ritmo_cardiaco>70&&notification_on===1){
                             //console.log("AAAAAAAAAAAAAAAAAAAAAAA");
                             notification_on=0;
+                            iniciarTimer();
 
                             // Mostrar o modal
                             const modal = document.getElementById('calm-song-modal');
@@ -658,8 +693,8 @@
 
                             // Configurar os botões
                             document.getElementById('confirm-calming').onclick = () => {
-                                //clearTimeout(notificationTimeout);
                                 modal.style.display = 'none';
+                                cancelarTimer();
                                 // Chamar função para tocar música calma
                                 playCalmingSong();
                             };
@@ -667,6 +702,7 @@
                             document.getElementById('cancel-calming').onclick = () => {
                                 //clearTimeout(notificationTimeout);
                                 modal.style.display = 'none';
+                                cancelarTimer();
 
                             };
 
@@ -694,17 +730,16 @@
                             const modal = document.getElementById('volume-modal');
                             modal.style.display = 'block';
 
+
                             // Configurar os botões
                             document.getElementById('confirm-volume-down').onclick = () => {
-                                //clearTimeout(notificationTimeout);
                                 modal.style.display = 'none';
-                                // Chamar função para reduzir volume
                                 volumedown();
                             };
 
                             document.getElementById('cancel-volume-down').onclick = () => {
-                                //clearTimeout(notificationTimeout);
                                 modal.style.display = 'none';
+
 
                             };
 
@@ -746,7 +781,7 @@
         }
 
         // Atualiza a progress bar e demais dados a cada 10 segundos
-        setInterval(fetchSyncedData, 2000);
+        setInterval(fetchSyncedData, 5000);
 
 
         // Exemplo de integração com controle (mantém os botões inalterados):
