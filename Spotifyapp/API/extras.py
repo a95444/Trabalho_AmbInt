@@ -218,7 +218,7 @@ def get_system_volume():
 
 def set_system_volume(volume_percent=30):
     try:
-        CoInitialize()  # Inicializa o COM para esta thread
+        CoInitialize()
         devices = AudioUtilities.GetSpeakers()
         interface = devices.Activate(
             IAudioEndpointVolume._iid_,
@@ -227,16 +227,14 @@ def set_system_volume(volume_percent=30):
         )
         volume = cast(interface, POINTER(IAudioEndpointVolume))
 
-        # Garante que o valor está entre 0% e 100%
-        volume_level = max(0.0, min(1.0, volume_percent / 100.0))
+        # Garante que o valor está entre 0 e 100
+        volume_percent = max(0, min(100, volume_percent))
+        volume_level = volume_percent / 100.0
+
         volume.SetMasterVolumeLevelScalar(volume_level, None)
         return True
     except Exception as e:
         print(f"Erro ao definir volume: {str(e)}")
         return False
     finally:
-        CoUninitialize()  # Libera recursos COM obrigatoriamente
-
-
-# Para definir para 30%
-set_system_volume(30)
+        CoUninitialize()

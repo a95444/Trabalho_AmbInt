@@ -68,8 +68,8 @@
 
 <div class="config-container p-6 bg-gray-800 rounded-lg mt-6">
     <!-- Slider Ritmo Cardíaco -->
-    <div class="mb-8">
-        <label class="block text-lg mb-2">
+    <div class="mb-8 flex flex-col items-center">
+        <label class="block text-lg mb-2 text-center">
             Limite Ritmo Cardíaco (BPM):
             <span id="bpmValue">70</span>
         </label>
@@ -77,13 +77,13 @@
                min="60"
                max="120"
                value="70"
-               class="heart-rate-slider"
+               class="heart-rate-slider w-64 mx-auto"
                id="heartRateSlider">
     </div>
 
     <!-- Slider Volume -->
-    <div>
-        <label class="block text-lg mb-2">
+    <div class="flex flex-col items-center">
+        <label class="block text-lg mb-2 text-center">
             Limite Volume (%):
             <span id="volumeValue">50</span>
         </label>
@@ -91,7 +91,7 @@
                min="0"
                max="100"
                value="50"
-               class="volume-slider"
+               class="volume-slider w-64 mx-auto"
                id="volumeSlider">
     </div>
 </div>
@@ -627,19 +627,24 @@
 
         function volumedown() {
             const settings = {
-                        bpm: document.getElementById('heartRateSlider').value,
-                        volume: document.getElementById('volumeSlider').value
-                    };
-            $.get('/spotify/api/set_volume_down/')
-             .done(function(data) {
-                 console.log('Volume reduzido:', data);
-                 // Atualize a interface aqui se necessário
-             })
-             .fail(function(error) {
-                 console.error('Erro ao reduzir volume:', error);
-             });
-        }
+                bpm: document.getElementById('heartRateSlider').value,
+                volume: document.getElementById('volumeSlider').value
+            };
 
+            $.ajax({
+                url: '/spotify/api/set_volume_down/',
+                method: 'GET',
+                data: {
+                    volume: settings.volume // Passa o valor do slider
+                },
+                success: function(data) {
+                    console.log('Volume reduzido:', data);
+                },
+                error: function(error) {
+                    console.error('Erro ao reduzir volume:', error);
+                }
+            });
+        }
 
         //FUNÇÕES DE TIMER
         let timer;
@@ -985,7 +990,7 @@
         //setInterval(fetchSyncedData, 5000);
 
         setInterval(atualizarUI, 1000);     // UI: 1s
-        setInterval(salvarDadoPeriodicamente, 5000);  // JSON: 5s
+        setInterval(salvarDadoPeriodicamente, 10000);  // JSON: 10s
 
 
 

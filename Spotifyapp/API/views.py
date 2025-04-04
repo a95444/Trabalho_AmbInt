@@ -561,9 +561,16 @@ def play_calm_song(request):
         }, status=400)
 
 def set_volume_down(request):
-    set_system_volume()
-    return JsonResponse({"status": "Success", "message": "Volume set to 30%"}, safe=False)
+    try:
+        # Obtém o valor do volume do request GET
+        volume = int(request.GET.get('volume', 30))  # Default 30 se não fornecido
+    except (ValueError, TypeError):
+        volume = 30
 
+    if set_system_volume(volume):
+        return JsonResponse({"status": "Success", "message": f"Volume set to {volume}%"})
+    else:
+        return JsonResponse({"status": "Error", "message": "Failed to set volume"}, status=500)
 
 WEBHOOK_URL = "https://hook.eu2.make.com/0a1185wba2jcsi8utipxo46qf2ug3htx"  # URL fixa
 
