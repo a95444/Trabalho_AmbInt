@@ -115,6 +115,8 @@ class CheckAuthentication(APIView):
             redirect_url=f"http://127.0.0.1:8000/spotify/auth-url"
             return HttpResponseRedirect(redirect_url)
 
+
+
 def home(request):
     return render(request, 'home.html')
 
@@ -157,8 +159,9 @@ class CurrentSong(APIView):
         artist_id = playback['item']['artists'][0]['id']
         # print(f"Artist id {artist_id}")
         artist_data = spotify_requests_artists(key, f"artists/{artist_id}")
-        # print(f"Artist data {artist_data}")
-        generos = artist_data['genres']
+
+        #print(f"Artist data {artist_data}")
+        #generos = artist_data['genres']
         artista = artist_data['name']
 
         # print(f"ITEM: {item}")
@@ -167,7 +170,7 @@ class CurrentSong(APIView):
         song = {
             "id": track_id,
             "title": musica,
-            "artist": artista,
+            "artist": artista, #artista
             "album_cover": item['album']['images'][0]['url'],
             "time": playback.get('progress_ms', 0),
             "duration": item['duration_ms'],
@@ -242,36 +245,17 @@ class SpotifyControls(APIView):
         return Response_status({"message": f"Action {action} executed successfully"}, status=status.HTTP_200_OK)
 
 
-
-# views.py
-'''class HeartRateAPI(APIView):
-    def get(self, request):
-        session_key = request.GET.get("session_key")
-        print(f"Session Key recebida: {session_key}")
-
-        if not session_key:
-            print("Erro1")
-            return Response({"error": "Parâmetro 'session_key' é obrigatório"}, status=400)
-
-        try:
-            token = Token.objects.get(user=session_key)
-        except Token.DoesNotExist:
-            print("Erro2")
-            return Response({"error": "Sessão não encontrada"}, status=404)
-
-        latest_hr = HeartRateData.objects.filter(user_session=token).order_by("-timestamp").first()
-
-        if not latest_hr:
-            print("Erro3")
-            return Response({"heart_rate": None}, status=200)  # Retorna vazio se não houver dados
-
-        print(latest_hr)
-        print(latest_hr.heart_rate)
-        return Response({"heart_rate": latest_hr.heart_rate})
-'''
+PERFIS_FILE = "perfis.json"
+DEFAULT_PROFILE = "default"
+#JSON_FILE = ""
+# Substitua a linha global JSON_FILE por:
+def get_json_file(request):
+    """Obtém o arquivo JSON correto baseado na sessão"""
+    profiles = load_profiles()
+    print(f"ABC: {request.session.get('json_file', profiles[DEFAULT_PROFILE])}")
+    return request.session.get('json_file', profiles[DEFAULT_PROFILE])
 
 
-JSON_FILE = "dados_ritmo.json"
 import time
 
 
@@ -306,7 +290,7 @@ class SyncedHeartRateMusic(APIView):
         artist_id = playback['item']['artists'][0]['id']
         #print(f"Artist id {artist_id}")
         artist_data = spotify_requests_artists(session_key, f"artists/{artist_id}")
-        #print(f"Artist data {artist_data}")
+        print(f"Artist data {artist_data}")
         generos = artist_data['genres']
         artista = artist_data['name']
 
@@ -344,11 +328,13 @@ class SyncedHeartRateMusic(APIView):
 
         return Response((response_data, entrada), status=200)
 
-    def _guardar_json(self, entrada):
+    def _guardar_json(self, entrada, request):
         """Guarda os dados mantendo o histórico completo com lock"""
         for _ in range(3):  # Tentar até 3 vezes em caso de conflito
             try:
-                with open(JSON_FILE, 'r+') as f:
+                json_file = get_json_file(request)
+                print(f"GUARDAR JSON: {json_file}")
+                with open(json_file, 'r+') as f:
                     portalocker.lock(f, portalocker.LOCK_EX)  # Bloqueio exclusivo
 
                     # Tenta ler dados existentes
@@ -377,24 +363,33 @@ class SyncedHeartRateMusic(APIView):
 def save_latest(request):
     if request.method == 'POST':
         try:
-            entrada = json.loads(request.body)
+            active_profile = request.session.get('active_profile', DEFAULT_PROFILE)
+            profiles = load_profiles()
+            json_file = request.session.get('json_file', profiles[DEFAULT_PROFILE])
 
-            with open(JSON_FILE, 'r+') as f:
+            new_data = json.loads(request.body)
+
+            # Modo 'r+' não cria o arquivo se não existir, use 'a+'
+            with open(json_file, 'a+') as f:  # Alterado para 'a+' para criar arquivo se necessário
                 portalocker.lock(f, portalocker.LOCK_EX)
-                dados = json.load(f)
-                dados.append(entrada)
-                f.seek(0)
-                json.dump(dados, f, indent=4)
-                f.truncate()
+                f.seek(0)  # Vai para o início para ler
 
-            return JsonResponse({"status": "Dado salvo"})
+                try:
+                    existing_data = json.load(f)
+                except json.JSONDecodeError:
+                    existing_data = []  # Inicializa se arquivo estiver vazio/corrompido
+
+                existing_data.append(new_data)
+
+                f.seek(0)
+                f.truncate()  # Limpa o arquivo antes de escrever
+                json.dump(existing_data, f, indent=4)
+
+            return JsonResponse({"status": "Dado salvo com sucesso"})
 
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
-
     return JsonResponse({"error": "Método não permitido"}, status=405)
-
-
 
 # views.py
 from django.http import JsonResponse
@@ -406,8 +401,10 @@ def artist_stats(request):
         import portalocker
         min_count = int(request.GET.get('min_count', 40))
         sort_order = request.GET.get('sort', 'desc')
+        json_file = get_json_file(request)
+        #print(f"artist_stats: {json_file}")
 
-        with open(JSON_FILE, 'r') as f:
+        with open(json_file, 'r') as f:
             portalocker.lock(f, portalocker.LOCK_SH)
             try:
                 data = json.load(f)
@@ -443,12 +440,15 @@ import traceback
 
 
 def genre_stats(request):
+    json_file = get_json_file(request)
+    print(f"genre_stats: {json_file}")
     try:
         import portalocker
         min_count = int(request.GET.get('min_count', 40))
         sort_order = request.GET.get('sort', 'desc')
-
-        with open(JSON_FILE, 'r') as f:
+        json_file = get_json_file(request)
+        #print(f"genre_stats: {json_file}")
+        with open(json_file, 'r') as f:
             portalocker.lock(f, portalocker.LOCK_SH)
             try:
                 data = json.load(f)
@@ -458,7 +458,7 @@ def genre_stats(request):
                 portalocker.unlock(f)
 
         stats = calcular_media_ritmo_por_genero(data)
-        print(f"STATS {stats}")
+        #print(f"STATS {stats}")
 
         # Filtrar e formatar para o frontend
         filtered_stats = {
@@ -475,7 +475,7 @@ def genre_stats(request):
             key=lambda x: x[1]["media_ritmo_cardiaco"],
             reverse=(sort_order == 'desc')
         )
-        print(f"sortedSTATS {sorted_stats}")
+        #print(f"sortedSTATS {sorted_stats}")
         return JsonResponse(dict(sorted_stats), safe=False)
 
     except Exception as e:
@@ -494,8 +494,8 @@ def play_calm_song(request):
     try:
         data = json.loads(request.body)
         user_key = data.get('key')
-
-        with open(JSON_FILE, 'r') as f:
+        json_file = get_json_file(request)
+        with open(json_file, 'r') as f:
             try:
                 json_data = json.load(f)
             except json.JSONDecodeError as e:
@@ -565,8 +565,9 @@ def play_stimulating_song(request):
     try:
         data = json.loads(request.body)
         user_key = data.get('key')
+        json_file = get_json_file(request)
 
-        with open(JSON_FILE, 'r') as f:
+        with open(json_file, 'r') as f:
             try:
                 json_data = json.load(f)
             except json.JSONDecodeError as e:
@@ -670,3 +671,89 @@ def trigger_make_webhook(request):
     except Exception as e:
         print("WEBHOOK A CORREU MALLLL")
         return JsonResponse({"error": str(e)}, status=500)
+
+
+#PERFIS
+def load_profiles():
+    """Carrega os perfis do arquivo JSON"""
+    if not os.path.exists(PERFIS_FILE):
+        return {DEFAULT_PROFILE: "dados_ritmo.json"}
+
+    with open(PERFIS_FILE, 'r') as f:
+        return json.load(f)  # Remove o [0], retorna o dicionário completo
+
+
+def save_profiles(profiles):
+    """Salva os perfis no arquivo JSON"""
+    with open(PERFIS_FILE, 'w') as f:
+        json.dump(profiles, f, indent=2)
+
+
+@csrf_exempt
+def get_profiles(request):
+    """Obtém a lista de perfis disponíveis"""
+    if request.method == 'GET':
+        try:
+            profiles = load_profiles()
+            return JsonResponse({
+                "profiles": list(profiles.keys()),
+                "active_profile": request.session.get('active_profile', DEFAULT_PROFILE)
+            })
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    return JsonResponse({"error": "Método não permitido"}, status=405)
+
+
+@csrf_exempt
+def create_profile(request):
+    """Cria um novo perfil"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            profile_name = data.get('profile_name')
+
+            profiles = load_profiles()
+
+            if profile_name in profiles:
+                return JsonResponse({"error": "Perfil já existe"}, status=400)
+
+            # Cria o arquivo com uma lista vazia
+            filename = f"dados_ritmo_{profile_name}.json"
+            with open(filename, 'w') as f:
+                json.dump([], f)  # Inicializa com array vazio
+
+            profiles[profile_name] = filename
+            save_profiles(profiles)
+
+            return JsonResponse({"status": "Perfil criado", "profile": profile_name})
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    return JsonResponse({"error": "Método não permitido"}, status=405)
+
+
+@csrf_exempt
+def set_active_profile(request):
+    """Define o perfil ativo"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            profile_name = data.get('profile_name')
+
+            profiles = load_profiles()
+
+            if profile_name not in profiles.keys():
+                return JsonResponse({"error": "Perfil não encontrado"}, status=404)
+
+            request.session['active_profile'] = profile_name
+            request.session['json_file'] = profiles[profile_name]  # Armazena o nome do arquivo na sessão
+
+            return JsonResponse({
+                "status": "Perfil ativo atualizado",
+                "profile": profile_name,
+                "json_file": request.session['json_file']})
+
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    return JsonResponse({"error": "Método não permitido"}, status=405)

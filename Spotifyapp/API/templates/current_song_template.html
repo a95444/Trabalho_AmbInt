@@ -14,6 +14,34 @@
 <body class="bg-gray-900 text-white font-sans">
 {% csrf_token %}
 
+<!-- Profile Selector -->
+<div class="fixed top-0 left-0 z-50 p-4 flex gap-4">
+    <div class="relative group">
+        <select id="profile-select" class="bg-gray-700 text-white px-4 py-2 rounded-lg cursor-pointer">
+            <option value="" disabled selected>Selecione um Perfil</option>
+            <!-- Opções serão preenchidas via JavaScript -->
+        </select>
+        <button id="new-profile-btn"
+                class="ml-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+            Novo Perfil
+        </button>
+    </div>
+</div>
+
+<!-- Modal para novo perfil -->
+<div id="new-profile-modal" class="modal">
+    <div class="modal-content">
+        <h3 class="text-xl font-bold mb-4">Criar Novo Perfil</h3>
+        <input type="text"
+               id="profile-name"
+               class="w-full bg-gray-700 text-white px-4 py-2 rounded-lg mb-4"
+               placeholder="Nome do perfil">
+        <div class="modal-buttons">
+            <button id="confirm-new-profile" class="bg-green-500 hover:bg-green-600">Criar</button>
+            <button id="cancel-new-profile" class="bg-gray-500 hover:bg-gray-600">Cancelar</button>
+        </div>
+    </div>
+</div>
 
 <div class="fixed top-0 right-0 z-50 p-4">
     <a href="/spotify/redirect"
@@ -285,6 +313,92 @@
         $("#request-stimulating-song").click(function() {
             playStimulatingSong();
         });
+
+
+        //Configurar o Perfil Ativo
+        // Gestão de Perfis
+        let activeProfile = 'default';
+
+        // Funções para gestão de perfis
+function loadProfiles() {
+    $.ajax({
+        url: '/spotify/api/get-profiles/',
+        method: 'GET',
+        success: function(response) {
+            const select = $('#profile-select');
+            select.empty();
+            select.append('<option value="" disabled selected>Selecione um Perfil</option>');
+
+            // Acessa response.profiles que é a lista de nomes
+            response.profiles.forEach(profile => {
+                select.append(`<option value="${profile}">${profile}</option>`);
+            });
+
+            select.val(response.active_profile);
+        },
+        error: function(error) {
+            console.error('Erro ao carregar perfis:', error);
+        }
+    });
+}
+        function createNewProfile(profileName) {
+            if (!profileName) return;
+
+            $.ajax({
+                url: '/spotify/api/create-profile/',
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': $("[name=csrfmiddlewaretoken]").val(),
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({
+                    profile_name: profileName
+                }),
+                success: function() {
+                    activeProfile = profileName;
+                    loadProfiles();
+                    $('#new-profile-modal').hide();
+                }
+            });
+        }
+
+        // Event Listeners para perfis
+        $('#profile-select').change(function() {
+            activeProfile = $(this).val();
+            // Atualizar interface com novo perfil
+            $.ajax({
+                url: '/spotify/api/set-active-profile/',
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': $("[name=csrfmiddlewaretoken]").val(),
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({
+                    profile_name: activeProfile
+                }),
+                success: function() {
+                    location.reload(); // Ou atualizar a interface conforme necessário
+                }
+            });
+        });
+
+        $('#new-profile-btn').click(() => $('#new-profile-modal').show());
+        $('#cancel-new-profile').click(() => $('#new-profile-modal').hide());
+
+        $('#confirm-new-profile').click(() => {
+            const profileName = $('#profile-name').val().trim();
+            if (profileName) {
+                createNewProfile(profileName);
+            }
+        });
+
+        // Carregar perfis ao iniciar
+        loadProfiles();
+
+
+
+
+
 
         // Adicionar um canvas para o gráfico no HTML
         // Configuração inicial do gráfico
@@ -572,7 +686,7 @@
 
             // Carregar dados iniciais
             updateAnalysisCharts();
-            setInterval(updateAnalysisCharts, 30000);
+            setInterval(updateAnalysisCharts, 60000);
         }
 
 
@@ -1069,8 +1183,8 @@
         // Atualiza a progress bar e demais dados a cada 10 segundos
         //setInterval(fetchSyncedData, 5000);
 
-        setInterval(atualizarUI, 1000);     // UI: 1s
-        setInterval(salvarDadoPeriodicamente, 10000);  // JSON: 10s
+        setInterval(atualizarUI, 2000);     // UI: 2s
+        setInterval(salvarDadoPeriodicamente, 3000);  // JSON: 10s
 
 
 
@@ -1172,7 +1286,19 @@
     </script>
 
     <style>
+    /* Estilos para o seletor de perfis */
+    #profile-select {
+        min-width: 200px;
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 0.5rem center;
+        background-size: 1.5em;
+    }
 
+    #new-profile-modal .modal-content {
+        max-width: 400px;
+    }
     /* Estilização do slider de progresso da música */
     #progress-bar {
         -webkit-appearance: none;

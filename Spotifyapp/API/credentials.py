@@ -1,3 +1,8 @@
-CLIENT_ID = "c5ffca15d2fa490eafe46327e8a5517f"
+'''CLIENT_ID = "c5ffca15d2fa490eafe46327e8a5517f"
 CLIENT_SECRET= "b60285d946f64915a94bb362aa056de4"
+REDIRECT_URL= "http://127.0.0.1:8000/spotify/redirect"'''
+
+#conta 2
+CLIENT_ID = "b84f890bd69e4378ae87a1dc34dccd1a"
+CLIENT_SECRET= "635354c3129042108d3343fa1ee12b27"
 REDIRECT_URL= "http://127.0.0.1:8000/spotify/redirect"

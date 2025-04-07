@@ -5,7 +5,7 @@ from datetime import timedelta
 from requests import *
 from.credentials import *
 import json
-
+import time
 BASE_URL='https://api.spotify.com/v1/me/'
 BASE_URL_ARTISTS='https://api.spotify.com/v1/'
 
@@ -123,7 +123,7 @@ def spotify_requests_execution(session_id, endpoint, params=None, method="get"):
         print(f"Erro na requisição para {endpoint}: {str(e)}")
         return {'error': {'message': str(e)}}
 
-def spotify_requests_artists(session_id, endpoint):
+def spotify_requests_artists(session_id, endpoint, max_retries=3):
     token = check_token(session_id)
     if not token:
         return {'error': {'message': 'Token inválido'}}
@@ -133,36 +133,49 @@ def spotify_requests_artists(session_id, endpoint):
         "Authorization": f"Bearer {token.access_token}"
     }
 
-    #print(f"Bearer {token.access_token}")
-
-    try:
-        # Endpoints que modificam estado
-        if "artists/" in endpoint:
-            response = get(BASE_URL_ARTISTS + endpoint, headers=headers)
-            #print(f"url artists: {BASE_URL_ARTISTS + endpoint}")
-
-        elif "audio-features/" in endpoint:
-            response = get(BASE_URL_ARTISTS + endpoint, headers=headers)
-            print(f"url audio: {BASE_URL_ARTISTS + endpoint}")
-        else:
-            response = get(BASE_URL + endpoint, headers=headers)
-
-        # Tratamento consistente de respostas
-        if not response.ok:
-            try:
-                return {'error': response.json()}
-            except:
-                return {'error': {'message': f"HTTP {response.status_code}"}}
-
+    for attempt in range(max_retries + 1):
         try:
+            # Construção dinâmica da URL
+            if "artists/" in endpoint:
+                url = BASE_URL_ARTISTS + endpoint
+                print(f"Artists url: {url}")
+                response = requests.get(url, headers=headers)
+            elif "audio-features/" in endpoint:
+                url = BASE_URL_ARTISTS + endpoint
+                print(f"Audio Features url: {url}")
+                response = requests.get(url, headers=headers)
+            else:
+                url = BASE_URL + endpoint
+                response = requests.get(url, headers=headers)
+
+            print(f"Response Status: {response.status_code}")
+
+            # Tratamento de Rate Limit (429)
+            if response.status_code == 429:
+                retry_after = int(response.headers.get('Retry-After', 10))  # Default 10s
+                print(f"Tempodeespera: {retry_after} ")
+                retry_after = min(retry_after, 60)  # Limita a 60 segundos <--- Correção
+                print(f"⚠️ Aguardando {retry_after}s...")
+                time.sleep(retry_after)
+                continue
+
+            # Tratamento de outros erros HTTP
+            if not response.ok:
+                try:
+                    return {'error': response.json()}
+                except:
+                    return {'error': {'message': f"HTTP {response.status_code}"}}
+
+            # Processamento de resposta bem-sucedida
             return response.json() if response.content else {'status': 'no_content'}
-        except ValueError:
-            return {'error': {'message': 'Resposta inválida da API'}}
 
-    except Exception as e:
-        print(f"Erro na requisição para {endpoint}: {str(e)}")
-        return {'error': {'message': str(e)}}
+        except Exception as e:
+            print(f"Erro na requisição para {endpoint}: {str(e)}")
+            if attempt == max_retries:  # Última tentativa
+                return {'error': {'message': str(e)}}
+            time.sleep(2 ** attempt)  # Backoff exponencial para outros erros
 
+    return {'error': {'message': 'Número máximo de tentativas excedido'}}
 
 def spotify_seek(session_id, position_ms):
     token = check_token(session_id)
