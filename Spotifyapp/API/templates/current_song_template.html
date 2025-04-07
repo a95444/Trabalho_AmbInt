@@ -15,56 +15,65 @@
 {% csrf_token %}
 
 
-    <div class="fixed top-0 right-0 z-50 p-4">
-        <a href="/spotify/redirect"
-           class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300">
-            Sincronizar Novamente com o Relógio
-        </a>
-    </div>
+<div class="fixed top-0 right-0 z-50 p-4">
+    <a href="/spotify/redirect"
+       class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300">
+        Sincronizar Novamente com o Relógio
+    </a>
+</div>
 
-    <div id="song-info" class="text-center mt-20">
-        <h3 id="song-title" class="text-3xl mb-4">{{ song.title }} - {{ song.artist }}</h3>
+<div id="song-info" class="text-center mt-20">
+    <h3 id="song-title" class="text-3xl mb-4">{{ song.title }} - {{ song.artist }}</h3>
 
-        <!-- Vinyl Container with continuous spinning animation -->
-        <div class="relative inline-block mb-10 animate-spin-fast">
+    <!-- Container Principal com posição relativa -->
+    <div class="relative flex justify-center mb-10"> <!-- Container principal -->
+
+        <!-- Botões de Pedido de música (posicionados à esquerda absoluta) -->
+        <div id="music-request-buttons" class="absolute left-0 top-1/2 transform -translate-y-1/2 flex flex-col gap-4 ml-4">
+            <button id="request-calm-song" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg text-lg">
+                Pedir Música Calma
+            </button>
+            <button id="request-stimulating-song" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg text-lg">
+                Pedir Música Animada
+            </button>
+        </div>
+
+        <!-- Vinyl Container (mantém centralizado) -->
+        <div class="relative inline-block animate-spin-fast">
             <div class="w-64 h-64 rounded-full bg-gradient-to-r from-gray-800 via-gray-700 to-gray-600 relative mx-auto">
                 <!-- Album Cover in the center (spinning with the vinyl) -->
-                <img id="album-cover" src="{{ song.album_cover }}" alt="Album Cover" class="w-44 h-44 rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-4 border-white object-cover scale-105">
+                <img id="album-cover" src="{{ song.album_cover }}" alt="Album Cover"
+                     class="w-44 h-44 rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-4 border-white object-cover scale-105">
             </div>
-        </div>
-
-
-
-        <!-- Song Info 
-        <div class="text-xl mb-6">
-            <p>Duration: {{ song.duration }} seconds</p>
-            <p>Time: {{ song.time }} seconds</p>
-        </div>-->
-
-        <!-- Progress Bar -->
-        <div id="progress-container" class="w-64 mx-auto mt-4">
-            <input
-            id="progress-bar"
-            type="range"
-            min="0"
-            max="{{ song.duration }}"
-            class="w-full h-2 bg-gray-300 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-            
-            <div class="flex justify-between text-sm text-gray-600 mt-1">
-                <span id="current-time">0:00</span>
-                <span id="total-time">{{ song.duration|date:"i:s" }}</span>
-            </div>
-        </div>
-        
-
-        <!-- Controls -->
-        <div class="flex justify-center space-x-4">
-            <button id="previous-btn" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-lg">Previous</button>
-            <button id="play-pause-btn" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg text-lg" data-action="resume">Play</button>
-            <button id="stop-btn" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg text-lg" data-action="stop">Stop</button>
-            <button id="skip-btn" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg text-lg">Skip</button>
         </div>
     </div>
+
+
+    <!-- Progress Bar -->
+    <div id="progress-container" class="w-64 mx-auto mt-4">
+        <input
+        id="progress-bar"
+        type="range"
+        min="0"
+        max="{{ song.duration }}"
+        class="w-full h-2 bg-gray-300 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+
+        <div class="flex justify-between text-sm text-gray-600 mt-1">
+            <span id="current-time">0:00</span>
+            <span id="total-time">{{ song.duration|date:"i:s" }}</span>
+        </div>
+    </div>
+
+
+    <!-- Controls -->
+    <div class="flex justify-center mt-4 space-x-4">
+        <button id="previous-btn" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-lg">Previous</button>
+        <button id="play-pause-btn" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg text-lg" data-action="resume">Play</button>
+        <button id="stop-btn" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg text-lg" data-action="stop">Stop</button>
+        <button id="skip-btn" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg text-lg">Skip</button>
+    </div>
+</div>
+
 
 <div class="config-container p-6 bg-gray-800 rounded-lg mt-6">
     <!-- Slider Ritmo Cardíaco -->
@@ -260,7 +269,7 @@
         }
 
 
-        // JavaScript Simples
+
         document.getElementById('heartRateSlider').addEventListener('input', function(e) {
             document.getElementById('bpmValue').textContent = e.target.value;
         });
@@ -269,6 +278,13 @@
             document.getElementById('volumeValue').textContent = e.target.value;
         });
 
+        $("#request-calm-song").click(function() {
+            playCalmingSong();
+        });
+
+        $("#request-stimulating-song").click(function() {
+            playStimulatingSong();
+        });
 
         // Adicionar um canvas para o gráfico no HTML
         // Configuração inicial do gráfico
@@ -565,6 +581,70 @@
             try {
                 const response = await $.ajax({
                     url: "/spotify/api/play_calm_song/",
+                    type: "POST",
+                    contentType: "application/json",
+                    headers: {
+                        "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val()
+                    },
+                    data: JSON.stringify({
+                        key: "{{ user_key }}"
+                    })
+                });
+
+                if (response.track_uris) {
+                    // 1. Adicionar à queue
+                    await Promise.all(response.track_uris.map(uri =>
+                        $.ajax({
+                            url: "/spotify/controls/",
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val()
+                            },
+                            data: JSON.stringify({
+                                key: userKey,
+                                action: "add_to_queue",
+                                uri: uri
+                            })
+                        })
+                    ));
+
+                    // 2. Pular para a primeira música nova
+                    await $.ajax({
+                        url: "/spotify/controls/",
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val()
+                        },
+                        data: JSON.stringify({
+                            key: userKey,
+                            action: "skip"
+                        })
+                    }).fail(function(jqXHR) {
+                        console.error("Erro no skip:", jqXHR.responseJSON);
+                        throw new Error("Falha ao pular música");
+                    });
+
+                    // 3. Forçar atualização
+                    fetchSyncedData();
+                }
+
+
+
+            } catch (error) {
+                console.error("Erro:", error);
+                if(error.status === 404) {
+                    alert('Por favor, inicie a reprodução em algum dispositivo Spotify primeiro.');
+                }
+            }
+        }
+
+        // Modifique a função playCalmingSong
+        async function playStimulatingSong() {
+            try {
+                const response = await $.ajax({
+                    url: "/spotify/api/play_stimulating_song/",
                     type: "POST",
                     contentType: "application/json",
                     headers: {

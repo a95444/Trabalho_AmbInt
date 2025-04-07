@@ -521,12 +521,12 @@ def play_calm_song(request):
             if not sorted_artists:
                 return JsonResponse({'error': 'Nenhum artista calmo encontrado'}, status=404)
 
-            print(f"Artistas filtrados: {len(filtered_artists)}")
-            print(f"Artistas ordenados: {[a[1]['artista'] for a in sorted_artists]}")
+            #print(f"Artistas filtrados: {len(filtered_artists)}")
+            #print(f"Artistas ordenados: {[a[1]['artista'] for a in sorted_artists]}")
             all_tracks = []
             for artist_id, artist_data in sorted_artists:
                 # Buscar top tracks para cada artista
-                print(f"artista nome: {artist_data}")
+                #print(f"artista nome: {artist_data}")
                 response = spotify_requests_artists(user_key, f"artists/{artist_id}/top-tracks?country=PT")
 
                 if response and 'tracks' in response:
@@ -539,7 +539,7 @@ def play_calm_song(request):
             if not all_tracks:
                 return JsonResponse({'error': 'Nenhuma música encontrada'}, status=404)
 
-            print(f"ALL TRACKS {len(all_tracks)}")
+            #print(f"ALL TRACKS {len(all_tracks)}")
             # Selecionar 10 músicas aleatórias da lista combinada
             num_tracks = min(10, len(all_tracks))
             selected_tracks = random.sample(all_tracks, min(num_tracks, len(all_tracks)))
@@ -559,6 +559,80 @@ def play_calm_song(request):
             'status': 'error',
             'message': str(e)
         }, status=400)
+
+@require_POST
+def play_stimulating_song(request):
+    try:
+        data = json.loads(request.body)
+        user_key = data.get('key')
+
+        with open(JSON_FILE, 'r') as f:
+            try:
+                json_data = json.load(f)
+            except json.JSONDecodeError as e:
+                print(f"Erro no JSON: {str(e)}")
+                return JsonResponse({"error": "Invalid JSON format"}, status=500)
+
+            stats = calcular_media_ritmo_por_artista(json_data)
+
+            # Filtrar artistas com mais de 50 registros
+            filtered_artists = [
+                (artist_id, data)
+                for artist_id, data in stats.items()
+                if data.get('contagem', 0) > 50
+            ]
+
+            # Ordenar por média de ritmo cardíaco (mais ativos primeiro)
+            sorted_artists = sorted(
+                filtered_artists,
+                key=lambda x: (x[1]['media_ritmo_cardiaco'], x[1]['contagem']),
+                reverse=True
+            )[:10]
+            random.shuffle(sorted_artists)  # Embaralha os artistas
+
+            if not sorted_artists:
+                return JsonResponse({'error': 'Nenhum artista calmo encontrado'}, status=404)
+
+            #print(f"Artistas filtrados: {len(filtered_artists)}")
+            print(f"Artistas ordenados: {[a[1]['artista'] for a in sorted_artists]}")
+            all_tracks = []
+            for artist_id, artist_data in sorted_artists:
+                # Buscar top tracks para cada artista
+                print(f"artista nome: {artist_data}")
+                response = spotify_requests_artists(user_key, f"artists/{artist_id}/top-tracks?country=PT")
+
+                if response and 'tracks' in response:
+                    # Adicionar 2 músicas por artista (ajuste conforme necessário)
+                    if len(response['tracks']) > 2:
+                        all_tracks.extend(random.sample(response['tracks'], 2))
+                    else:
+                        all_tracks.extend(response['tracks'])
+
+            if not all_tracks:
+                return JsonResponse({'error': 'Nenhuma música encontrada'}, status=404)
+
+            #print(f"ALL TRACKS {len(all_tracks)}")
+            # Selecionar 10 músicas aleatórias da lista combinada
+            num_tracks = min(10, len(all_tracks))
+            selected_tracks = random.sample(all_tracks, min(num_tracks, len(all_tracks)))
+
+            return JsonResponse({
+                'status': 'success',
+                'track_uris': [track['uri'] for track in selected_tracks],
+                'tracks': [{
+                    'name': track['name'],
+                    'artist': track['artists'][0]['name']
+                } for track in selected_tracks]
+            })
+
+    except Exception as e:
+        print(f"Erro no processamento: {str(e)}")
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=400)
+
+
 
 def set_volume_down(request):
     try:
